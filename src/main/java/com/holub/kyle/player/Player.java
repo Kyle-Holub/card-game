@@ -1,7 +1,6 @@
 package com.holub.kyle.player;
 
 import com.holub.kyle.deck.Card;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,6 +11,7 @@ import java.util.List;
 public abstract class Player {
 
     private final List<Card> hand = new ArrayList<>();
+    private int score;
 
     @Setter
     private String name;
@@ -31,5 +31,9 @@ public abstract class Player {
     @Override
     public String toString() {
         return name;
+    }
+
+    public void addScore(int score) {
+        this.score += score;
     }
 }

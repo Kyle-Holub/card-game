@@ -34,6 +34,8 @@ public class HumanPlayer extends Player {
             index = Integer.parseInt(input);
         }
 
-        return getHand().get(index);
+        Card cardToPlay = getHand().get(index);
+        getHand().remove(cardToPlay);
+        return cardToPlay;
     }
 }

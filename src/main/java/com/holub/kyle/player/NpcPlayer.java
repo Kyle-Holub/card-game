@@ -27,6 +27,7 @@ public class NpcPlayer extends Player {
     @Override
     public Card playCard() {
         Card cardToPlay = getHand().get(0);
+        getHand().remove(cardToPlay);
         log.info(String.format("%s played %s", this, cardToPlay));
         return cardToPlay;
     }

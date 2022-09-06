@@ -10,8 +10,6 @@ public class DealSequence {
 
     private final Deck deck = new Deck();
 
-
-
     public void dealCards(List<Player> players, int roundNumber) {
 
         players.forEach(player -> giveCards(player, roundNumber));

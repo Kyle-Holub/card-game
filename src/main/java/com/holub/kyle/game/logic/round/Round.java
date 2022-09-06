@@ -1,10 +1,9 @@
 package com.holub.kyle.game.logic.round;
 
-import com.holub.kyle.deck.Card;
 import com.holub.kyle.game.logic.round.sequence.BidSequence;
 import com.holub.kyle.game.logic.round.sequence.DealSequence;
 import com.holub.kyle.game.logic.round.sequence.PlaySequence;
-import com.holub.kyle.game.logic.trick.TrickEvaluator;
+import com.holub.kyle.game.logic.round.sequence.ScoreSequence;
 import com.holub.kyle.player.Player;
 import lombok.Getter;
 
@@ -19,14 +18,14 @@ public class Round {
     private final List<Player> players;
 
     private Map<Player, Integer> bidMap;
-    private Map<Card, Player> playedCardsMap;
+    private Map<Player, Integer> trickMap;
     private Player winner;
 
     public Round(int newRoundNumber, List<Player> newPlayers) {
         roundNumber = newRoundNumber;
         players = newPlayers;
         bidMap = new HashMap<>();
-        playedCardsMap = new HashMap<>();
+        trickMap = new HashMap<>();
     }
 
     public void executeRound() {
@@ -36,12 +35,10 @@ public class Round {
         BidSequence bidSequence = new BidSequence(players);
         bidMap = bidSequence.takeBids();
 
-        PlaySequence playSequence = new PlaySequence(players);
-        playedCardsMap = playSequence.playCards();
+        PlaySequence playSequence = new PlaySequence();
+        trickMap = playSequence.playCards(players);
 
-        TrickEvaluator trickEvaluator = new TrickEvaluator();
-        winner = trickEvaluator.scoreTrick(playedCardsMap);
-
-        // tally scores for round
+        ScoreSequence scoreSequence = new ScoreSequence();
+        scoreSequence.tallyScores(players, bidMap, trickMap);
     }
 }
