@@ -10,10 +10,10 @@ import java.util.Map;
 
 public class TrickEvaluator {
 
-    public Player scoreTrick(Map<Card, Player> playedCardsMap, Suit suit) {
+    public Player scoreTrick(Map<Card, Player> playedCardsMap, Suit trumpSuit) {
         CardComparator comparator = new CardComparator();
         List<Card> cards = new ArrayList<>(playedCardsMap.keySet());
-        Card winningCard = comparator.compare(cards.get(0), cards.get(1));
+        Card winningCard = comparator.compare(List.of(cards.get(0), cards.get(1)), trumpSuit);
         return playedCardsMap.get(winningCard);
     }
 }

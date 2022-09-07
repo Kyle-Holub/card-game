@@ -1,30 +1,54 @@
 package com.holub.kyle.game.logic.trick;
 
 import com.holub.kyle.deck.Card;
+import com.holub.kyle.deck.enums.Suit;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class CardComparator {
-    // TODO implement trump suit
-    public Card compare(Card cardOne, Card cardTwo) {
-        if (suitsMatch(cardOne, cardTwo)) {
-            return compareRanks(cardOne, cardTwo);
-        } else if (cardOne.getSuitValue() > cardTwo.getSuitValue()) {
-            return cardOne;
+    public Card compare(List<Card> cards, Suit trumpSuit) {
+        validateComparisonInput(cards);
+        List<Card> trumpSuitCards = cards.stream().filter(isSuit(trumpSuit)).collect(Collectors.toList());
+        if (trumpSuitCards.isEmpty()) {
+            Suit initialSuit = cards.get(0).getSuit();
+            List<Card> trickSuitCards = cards.stream().filter(isSuit(initialSuit)).collect(Collectors.toList());
+            return compareAgainstSuitAndReturn(trickSuitCards);
         } else {
-            return cardTwo;
+            return compareAgainstSuitAndReturn(trumpSuitCards);
         }
     }
 
-    private static boolean suitsMatch(Card cardOne, Card cardTwo) {
-        return cardOne.getSuitValue() == cardTwo.getSuitValue();
+    private static Card compareAgainstSuitAndReturn(List<Card> trumpSuitCards) {
+        Optional<Card> winningCard = trumpSuitCards.stream().max(Card.getRankComparator());
+        if (winningCard.isPresent()) {
+            return winningCard.get();
+        }
+        throw new IllegalArgumentException(String.format("Unknown error - no winning card from: %s", trumpSuitCards));
     }
 
-    private Card compareRanks(Card cardOne, Card cardTwo) {
-        if (cardOne.getRankValue() > cardTwo.getRankValue()) {
-            return cardOne;
-        } else if (cardOne.getRankValue() < cardTwo.getRankValue()) {
-            return cardTwo;
-        } else {
-            throw new IllegalArgumentException(String.format("Cards cannot be identical: %s & %s", cardOne, cardTwo));
+    private Predicate<Card> isSuit(Suit suit) {
+        return card -> card.getSuit().equals(suit);
+    }
+
+    private static void validateComparisonInput(List<Card> cards) {
+//        if (Game.DEBUG) {
+        if (cards == null || cards.isEmpty()) {
+            throw new IllegalArgumentException("Null/empty card list unacceptable");
+        }
+        List<Card> duplicates = cards.stream()
+                .collect(Collectors.groupingBy(card -> card.getRank() + "-" + card.getSuit(), Collectors.toList()))
+                .values()
+                .stream()
+                .filter(i -> i.size() > 1)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+        if (!duplicates.isEmpty()) {
+            throw new IllegalArgumentException(String.format("Cards cannot be identical: %s", duplicates));
         }
     }
+//    }
 }
