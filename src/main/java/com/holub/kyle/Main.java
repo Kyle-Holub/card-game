@@ -1,7 +1,10 @@
 package com.holub.kyle;
 
+import com.holub.kyle.game.logic.round.RoundManager;
+
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        RoundManager game = new RoundManager();
+        game.doStuff();
     }
 }

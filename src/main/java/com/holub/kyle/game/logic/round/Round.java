@@ -6,31 +6,33 @@ import com.holub.kyle.game.logic.round.sequence.PlaySequence;
 import com.holub.kyle.game.logic.round.sequence.ScoreSequence;
 import com.holub.kyle.player.Player;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Getter
 public class Round {
 
-    private final int roundNumber;
+    private final int numCards;
     private final List<Player> players;
 
     private Map<Player, Integer> bidMap;
     private Map<Player, Integer> trickMap;
-    private Player winner;
 
-    public Round(int newRoundNumber, List<Player> newPlayers) {
-        roundNumber = newRoundNumber;
+    public Round(int newNumCards, List<Player> newPlayers) {
+        numCards = newNumCards;
         players = newPlayers;
         bidMap = new HashMap<>();
         trickMap = new HashMap<>();
     }
 
     public void executeRound() {
+        log.info(String.format("Starting round with %s cards", numCards));
         DealSequence dealSequence = new DealSequence();
-        dealSequence.dealCards(players, roundNumber);
+        dealSequence.dealCards(players, numCards);
 
         BidSequence bidSequence = new BidSequence(players);
         bidMap = bidSequence.takeBids();

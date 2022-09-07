@@ -15,12 +15,15 @@ public class PlaySequence {
 
     public Map<Player, Integer> playCards(List<Player> players) {
         Map<Player, Integer> trickMap = initTrickMap(players);
-        Map<Card, Player> playedCardsMap = new HashMap<>();
-        players.forEach(player -> playedCardsMap.put(player.playCard(), player));
 
-        TrickEvaluator trickEvaluator = new TrickEvaluator();
-        Player winner = trickEvaluator.scoreTrick(playedCardsMap);
-        trickMap.compute(winner, addTrickWonFunction);
+        for (int i = 0; i < players.get(0).getHand().size(); i++) {
+            Map<Card, Player> playedCardsMap = new HashMap<>();
+            players.forEach(player -> playedCardsMap.put(player.playCard(), player));
+
+            TrickEvaluator trickEvaluator = new TrickEvaluator();
+            Player winner = trickEvaluator.scoreTrick(playedCardsMap);
+            trickMap.compute(winner, addTrickWonFunction);
+        }
 
         return trickMap;
     }
