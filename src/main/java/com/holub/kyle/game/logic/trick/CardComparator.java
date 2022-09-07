@@ -3,6 +3,7 @@ package com.holub.kyle.game.logic.trick;
 import com.holub.kyle.deck.Card;
 
 public class CardComparator {
+    // TODO implement trump suit
     public Card compare(Card cardOne, Card cardTwo) {
         if (suitsMatch(cardOne, cardTwo)) {
             return compareRanks(cardOne, cardTwo);

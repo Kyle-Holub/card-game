@@ -20,13 +20,15 @@ public class NpcPlayer extends Player {
 
     @Override
     public int getBid() {
-        log.info(String.format("%s bid 0", this));
-        return 0;
+        int bid = RAND.nextInt(getHand().size());
+        log.info(String.format("%s bid %s", this, bid));
+        return bid;
     }
 
     @Override
     public Card playCard() {
-        Card cardToPlay = getHand().get(0);
+        int numCardsInHand = getHand().size();
+        Card cardToPlay = getHand().get(RAND.nextInt(numCardsInHand));
         getHand().remove(cardToPlay);
         log.info(String.format("%s played %s", this, cardToPlay));
         return cardToPlay;

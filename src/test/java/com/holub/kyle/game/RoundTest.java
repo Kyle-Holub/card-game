@@ -12,8 +12,6 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
 
 class RoundTest {
     @ParameterizedTest
@@ -26,14 +24,6 @@ class RoundTest {
         assertThat(round.getPlayers()).hasSize(numPlayers);
     }
 
-    @Test
-    void canTakeBids() {
-        Round round = new Round(1, buildMockPlayerList(5));
-
-        round.executeRound();
-
-        assertThat(round.getBidMap()).containsValue(1);
-    }
 
     @Test
     void canPlayCards() {
@@ -83,18 +73,5 @@ class RoundTest {
 
     private List<Player> buildPlayerList(int numPlayers) {
         return IntStream.range(0, numPlayers).mapToObj(i -> new NpcPlayer()).collect(Collectors.toList());
-    }
-
-    private List<Player> buildMockPlayerList(int numPlayers) {
-        return IntStream.range(0, numPlayers).mapToObj(RoundTest::newMockPlayer).collect(Collectors.toList());
-
-    }
-
-    private static NpcPlayer newMockPlayer(int i) {
-        NpcPlayer mockPlayer = new NpcPlayer();
-        mockPlayer.setName("Mock-" + i);
-        mockPlayer = spy(mockPlayer);
-        when(mockPlayer.getBid()).thenReturn(1);
-        return mockPlayer;
     }
 }

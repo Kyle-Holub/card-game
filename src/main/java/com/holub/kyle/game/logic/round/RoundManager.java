@@ -12,7 +12,7 @@ import java.util.stream.IntStream;
 @Slf4j
 public class RoundManager {
 
-    public void doStuff() {
+    public void playRounds() {
         log.info("Starting...");
         List<Player> players = IntStream.range(0, 4).mapToObj(i -> new NpcPlayer()).collect(Collectors.toList());
 
@@ -25,6 +25,8 @@ public class RoundManager {
             round.executeRound();
         }
 
+        log.info("SCORES:");
+        players.forEach(player -> log.info(player.toString() + ": " + player.getScore()));
         Player winner = players.stream().max(Comparator.comparing(Player::getScore)).get();
         log.info("Winner is " + winner + " with " + winner.getScore());
     }

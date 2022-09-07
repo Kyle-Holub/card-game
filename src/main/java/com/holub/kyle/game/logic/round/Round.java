@@ -1,5 +1,6 @@
 package com.holub.kyle.game.logic.round;
 
+import com.holub.kyle.deck.Card;
 import com.holub.kyle.game.logic.round.sequence.BidSequence;
 import com.holub.kyle.game.logic.round.sequence.DealSequence;
 import com.holub.kyle.game.logic.round.sequence.PlaySequence;
@@ -16,29 +17,29 @@ import java.util.Map;
 @Getter
 public class Round {
 
-    private final int numCards;
+    private final int numTricks;
     private final List<Player> players;
 
     private Map<Player, Integer> bidMap;
     private Map<Player, Integer> trickMap;
 
-    public Round(int newNumCards, List<Player> newPlayers) {
-        numCards = newNumCards;
+    public Round(int numTricks, List<Player> newPlayers) {
+        this.numTricks = numTricks;
         players = newPlayers;
         bidMap = new HashMap<>();
         trickMap = new HashMap<>();
     }
 
     public void executeRound() {
-        log.info(String.format("Starting round with %s cards", numCards));
+        log.info(String.format("Starting round with %s cards", numTricks));
         DealSequence dealSequence = new DealSequence();
-        dealSequence.dealCards(players, numCards);
+        Card trumpCard = dealSequence.dealCards(players, numTricks);
 
         BidSequence bidSequence = new BidSequence(players);
         bidMap = bidSequence.takeBids();
 
         PlaySequence playSequence = new PlaySequence();
-        trickMap = playSequence.playCards(players);
+        trickMap = playSequence.playCards(players, numTricks, trumpCard);
 
         ScoreSequence scoreSequence = new ScoreSequence();
         scoreSequence.tallyScores(players, bidMap, trickMap);
