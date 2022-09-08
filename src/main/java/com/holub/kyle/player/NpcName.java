@@ -51,17 +51,16 @@ public class NpcName {
     }
 
     enum LastName {
-        BIFFLE,
-        CANKER,
-        DIMICK,
-        FLAPPER,
+        BONK,
+        CRUG,
+        DING,
+        FRING,
         GOBBER,
         HONKER,
         KONKER,
-        LAPKIN,
-        MOPPIK,
-        PLUMBIS,
-        RIDDLE,
+        MUPS,
+        PLUMBUS,
+        ROGNAR,
         STRONK,
         THROMBUS;
 

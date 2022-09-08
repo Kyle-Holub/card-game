@@ -35,7 +35,6 @@ public class CardComparator {
     }
 
     private static void validateComparisonInput(List<Card> cards) {
-//        if (Game.DEBUG) {
         if (cards == null || cards.isEmpty()) {
             throw new IllegalArgumentException("Null/empty card list unacceptable");
         }
@@ -50,5 +49,4 @@ public class CardComparator {
             throw new IllegalArgumentException(String.format("Cards cannot be identical: %s", duplicates));
         }
     }
-//    }
 }

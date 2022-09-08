@@ -12,7 +12,21 @@ import java.util.stream.IntStream;
 @Slf4j
 public class RoundManager {
 
-    public void playRounds() {
+    public void playGames(int numGames) {
+        int highestScore = 0;
+
+        for (int i = 0; i < numGames; i++) {
+            int score = playRounds();
+            if (score > highestScore) {
+                highestScore = score;
+            }
+        }
+
+        log.info("HIGHEST SCORE:" + highestScore);
+    }
+
+
+    public int playRounds() {
         log.info("Starting...");
         List<Player> players = IntStream.range(0, 4).mapToObj(i -> new NpcPlayer()).collect(Collectors.toList());
 
@@ -29,5 +43,6 @@ public class RoundManager {
         players.forEach(player -> log.info(player.toString() + ": " + player.getScore()));
         Player winner = players.stream().max(Comparator.comparing(Player::getScore)).get();
         log.info("Winner is " + winner + " with " + winner.getScore());
+        return winner.getScore();
     }
 }

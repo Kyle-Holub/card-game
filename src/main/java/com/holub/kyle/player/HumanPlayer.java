@@ -1,6 +1,7 @@
 package com.holub.kyle.player;
 
 import com.holub.kyle.deck.Card;
+import com.holub.kyle.deck.enums.Suit;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Scanner;
@@ -22,7 +23,7 @@ public class HumanPlayer extends Player {
     }
 
     @Override
-    public Card playCard() {
+    public Card playCard(Suit leadSuit, Suit trumpSuit) {
         log.info("Your cards are: " + getHand().toString());
         log.info("Enter card to play...");
         String input = scanner.nextLine();

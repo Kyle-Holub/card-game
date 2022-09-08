@@ -36,5 +36,4 @@ class BidSequenceTest {
         when(mockPlayer.getBid()).thenReturn(1);
         return mockPlayer;
     }
-
 }

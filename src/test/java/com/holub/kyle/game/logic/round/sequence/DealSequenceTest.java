@@ -42,6 +42,4 @@ class DealSequenceTest {
         assertThat(players.get(3).getHand()).hasSize(5);
         assertThat(players.get(4).getHand()).hasSize(5);
     }
-
-
 }

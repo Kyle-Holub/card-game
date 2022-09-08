@@ -22,7 +22,7 @@ public class PlaySequence {
 
         for (int i = 0; i < numTricks; i++) {
             Map<Card, Player> playedCardsMap = new HashMap<>();
-            players.forEach(player -> playedCardsMap.put(player.playCard(), player));
+            players.forEach(player -> playedCardsMap.put(player.playCard(null, trumpCard.getSuit()), player));
 
             log.info("Evaluating trick");
             TrickEvaluator trickEvaluator = new TrickEvaluator();

@@ -1,6 +1,7 @@
 package com.holub.kyle.player;
 
 import com.holub.kyle.deck.Card;
+import com.holub.kyle.deck.enums.Suit;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,7 +19,7 @@ public abstract class Player {
 
     public abstract int getBid();
 
-    public abstract Card playCard();
+    public abstract Card playCard(Suit leadSuit, Suit trumpSuit);
 
     public void giveCard(Card newCard) {
         hand.add(newCard);
