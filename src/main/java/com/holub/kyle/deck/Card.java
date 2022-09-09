@@ -4,20 +4,23 @@ import com.holub.kyle.deck.enums.Rank;
 import com.holub.kyle.deck.enums.Suit;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
+
+import java.util.Comparator;
 
 @Getter
-@ToString
 @RequiredArgsConstructor
 public class Card {
-    private final Suit suit;
     private final Rank rank;
+    private final Suit suit;
 
-    public int getSuitValue() {
-        return suit.getValue();
+    private static final Comparator<Card> RANK_COMPARATOR = Comparator.comparingInt(c -> c.getRank().getValue());
+
+    public static Comparator<Card> getRankComparator() {
+        return RANK_COMPARATOR;
     }
 
-    public int getRankValue() {
-        return rank.getValue();
+    @Override
+    public String toString() {
+        return rank.name() + " of " + suit.name();
     }
 }

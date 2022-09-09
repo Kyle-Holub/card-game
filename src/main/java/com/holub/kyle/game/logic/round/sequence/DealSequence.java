@@ -1,5 +1,6 @@
 package com.holub.kyle.game.logic.round.sequence;
 
+import com.holub.kyle.deck.Card;
 import com.holub.kyle.deck.Deck;
 import com.holub.kyle.player.Player;
 
@@ -10,14 +11,12 @@ public class DealSequence {
 
     private final Deck deck = new Deck();
 
-
-
-    public void dealCards(List<Player> players, int roundNumber) {
-
-        players.forEach(player -> giveCards(player, roundNumber));
+    public Card dealCards(List<Player> players, int numCardsToGive) {
+        players.forEach(player -> giveCards(player, numCardsToGive));
+        return deck.drawCard();
     }
 
-    private void giveCards(Player player, int roundNumber) {
-        IntStream.range(0, roundNumber).forEach(i -> player.giveCard(deck.drawCard()));
+    private void giveCards(Player player, int numCardsToGive) {
+        IntStream.range(0, numCardsToGive).forEach(i -> player.giveCard(deck.drawCard()));
     }
 }

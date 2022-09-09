@@ -19,7 +19,7 @@ public class Deck {
     }
 
     private static Stream<Card> mapSuitToRanks(Suit suit) {
-        return Arrays.stream(Rank.values()).map(rank -> new Card(suit, rank));
+        return Arrays.stream(Rank.values()).map(rank -> new Card(rank, suit));
     }
 
     public Card drawCard() {

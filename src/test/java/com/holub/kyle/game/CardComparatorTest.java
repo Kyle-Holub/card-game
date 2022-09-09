@@ -8,7 +8,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import java.util.List;
+
+import static com.holub.kyle.assertions.CardAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class CardComparatorTest {
@@ -22,67 +24,91 @@ class CardComparatorTest {
     @Nested
     class RankTests {
         @Test
-        void aceIsHigherThanKingAsFirstArg() {
-            Card ace = new Card(Suit.CLUBS, Rank.ACE);
-            Card king = new Card(Suit.CLUBS, Rank.KING);
+        void aceIsHigherThanKing() {
+            Card ace = new Card(Rank.ACE, Suit.CLUBS);
+            Card king = new Card(Rank.KING, Suit.CLUBS);
 
-            Card winner = comparator.compare(ace, king);
+            Card winner = comparator.compare(List.of(ace, king), Suit.HEARTS);
 
-            assertThat(winner.getRank()).isEqualTo(Rank.ACE);
+            assertThat(winner).hasRank(Rank.ACE);
         }
 
         @Test
-        void aceIsHigherThanKingAsSecondArg() {
-            Card ace = new Card(Suit.CLUBS, Rank.ACE);
-            Card king = new Card(Suit.CLUBS, Rank.KING);
+        void kingIsHigherThanQueen() {
+            Card king = new Card(Rank.KING, Suit.CLUBS);
+            Card queen = new Card(Rank.QUEEN, Suit.CLUBS);
 
-            Card winner = comparator.compare(king, ace);
+            Card winner = comparator.compare(List.of(king, queen), Suit.DIAMONDS);
 
-            assertThat(winner.getRank()).isEqualTo(Rank.ACE);
+            assertThat(winner).hasRank(Rank.KING);
+        }
+
+        @Test
+        void kingHigherThanQueenAsSecondListItem() {
+            Card queen = new Card(Rank.QUEEN, Suit.CLUBS);
+            Card king = new Card(Rank.KING, Suit.CLUBS);
+
+            Card winner = comparator.compare(List.of(queen, king), Suit.DIAMONDS);
+
+            assertThat(winner).hasRank(Rank.KING);
         }
 
         @Test
         void kingIsHigherThanTwo() {
-            Card king = new Card(Suit.CLUBS, Rank.KING);
-            Card two = new Card(Suit.CLUBS, Rank.TWO);
+            Card king = new Card(Rank.KING, Suit.CLUBS);
+            Card two = new Card(Rank.TWO, Suit.CLUBS);
 
+            Card winner = comparator.compare(List.of(king, two), Suit.DIAMONDS);
 
-            Card winner = comparator.compare(king, two);
+            assertThat(winner).hasRank(Rank.KING);
+        }
 
-            assertThat(winner.getRank()).isEqualTo(Rank.KING);
+        @Test
+        void firstCardWinsGivenOnlySuitWithNoTrumpSuits() {
+            Card jackOfClubs = new Card(Rank.JACK, Suit.CLUBS);
+            Card queenOfDiamonds = new Card(Rank.QUEEN, Suit.DIAMONDS);
+            Card aceOfSpades = new Card(Rank.ACE, Suit.SPADES);
+
+            Card highestCard = comparator.compare(List.of(jackOfClubs, queenOfDiamonds, aceOfSpades), Suit.HEARTS);
+
+            assertThat(highestCard).hasRank(Rank.JACK).hasSuit(Suit.CLUBS);
         }
     }
 
     @Nested
-    class SuitTests {
+    class TrumpTests {
         @Test
-        void diamondsIsHigherThanHeartsAsFirstArg() {
-            Card diamond = new Card(Suit.DIAMONDS, Rank.TWO);
-            Card heart = new Card(Suit.HEARTS, Rank.TWO);
+        void singleTrumpCardWillWinComparison() {
+            Card nonTrumpSuitCard = new Card(Rank.ACE, Suit.HEARTS);
+            Card trumpSuitCard = new Card(Rank.THREE, Suit.SPADES);
 
-            Card winner = comparator.compare(diamond, heart);
+            Card highestCard = comparator.compare(List.of(nonTrumpSuitCard, trumpSuitCard), Suit.SPADES);
 
-            assertThat(winner.getSuit()).isEqualTo(Suit.DIAMONDS);
+            assertThat(highestCard).hasRank(Rank.THREE).hasSuit(Suit.SPADES);
         }
 
         @Test
-        void diamondsIsHigherThanHeartsAsSecondArg() {
-            Card diamond = new Card(Suit.DIAMONDS, Rank.TWO);
-            Card heart = new Card(Suit.HEARTS, Rank.TWO);
+        void highestTrumpWinsComparison() {
+            Card regularCard = new Card(Rank.TWO, Suit.DIAMONDS);
+            Card secondHighestTrumpSuitCard = new Card(Rank.TEN, Suit.SPADES);
+            Card highestTrumpSuitCard = new Card(Rank.ACE, Suit.SPADES);
+            List<Card> cardList = List.of(regularCard, highestTrumpSuitCard, secondHighestTrumpSuitCard);
 
-            Card winner = comparator.compare(heart, diamond);
+            Card highestCard = comparator.compare(cardList, Suit.SPADES);
 
-            assertThat(winner.getSuit()).isEqualTo(Suit.DIAMONDS);
+            assertThat(highestCard).hasRank(Rank.ACE).hasSuit(Suit.SPADES);
         }
 
         @Test
-        void spadesGraterThanClubs() {
-            Card spade = new Card(Suit.SPADES, Rank.TWO);
-            Card club = new Card(Suit.CLUBS, Rank.TWO);
+        void leadTrumpWinsComparison() {
+            Card highestTrumpSuitCard = new Card(Rank.QUEEN, Suit.HEARTS);
+            Card regularCard = new Card(Rank.TWO, Suit.DIAMONDS);
+            Card secondHighestTrumpSuitCard = new Card(Rank.TEN, Suit.HEARTS);
+            List<Card> cardList = List.of(secondHighestTrumpSuitCard, regularCard, highestTrumpSuitCard);
 
-            Card winner = comparator.compare(spade, club);
+            Card highestCard = comparator.compare(cardList, Suit.HEARTS);
 
-            assertThat(winner.getSuit()).isEqualTo(Suit.SPADES);
+            assertThat(highestCard).hasRank(Rank.QUEEN).hasSuit(Suit.HEARTS);
         }
     }
 
@@ -90,12 +116,11 @@ class CardComparatorTest {
     class ExceptionTests {
         @Test
         void identicalCardsThrowsException() {
-            Card card = new Card(Suit.DIAMONDS, Rank.TWO);
-            Card duplicateCard = new Card(Suit.DIAMONDS, Rank.TWO);
+            List<Card> duplicateCardList = List.of(new Card(Rank.TWO, Suit.DIAMONDS), new Card(Rank.TWO, Suit.DIAMONDS));
 
-            assertThatThrownBy(() -> comparator.compare(card, duplicateCard))
+            assertThatThrownBy(() -> comparator.compare(duplicateCardList, Suit.DIAMONDS))
                     .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessageContaining(card.toString());
+                    .hasMessageContaining(new Card(Rank.TWO, Suit.DIAMONDS).toString());
         }
     }
 }

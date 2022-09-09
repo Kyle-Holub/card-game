@@ -10,4 +10,9 @@ public enum Rank {
     EIGHT(6), NINE(7), TEN(8), JACK(9), QUEEN(10), KING(11);
 
     private final int value;
+
+    @Override
+    public String toString() {
+        return this.name().charAt(0) + this.name().substring(1).toLowerCase();
+    }
 }

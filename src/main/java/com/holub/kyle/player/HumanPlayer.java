@@ -1,8 +1,10 @@
 package com.holub.kyle.player;
 
 import com.holub.kyle.deck.Card;
+import com.holub.kyle.deck.enums.Suit;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
 import java.util.Scanner;
 
 @Slf4j
@@ -22,18 +24,21 @@ public class HumanPlayer extends Player {
     }
 
     @Override
-    public Card playCard() {
+    public Card playCardEnforced(List<Card> cards, Suit leadSuit, Suit trumpSuit) {
         log.info("Your cards are: " + getHand().toString());
+        log.info("Cards you can play: " + cards.toString());
         log.info("Enter card to play...");
         String input = scanner.nextLine();
         int index = Integer.parseInt(input);
 
-        while (index < 0 || index > getHand().size()) {
-            log.info(String.format("Index must be between 0 and %s", getHand().size()));
+        while (index < 0 || index > cards.size()) {
+            log.info(String.format("Index must be between 0 and %s", cards.size()));
             input = scanner.nextLine();
             index = Integer.parseInt(input);
         }
 
-        return getHand().get(index);
+        Card cardToPlay = cards.get(index);
+        getHand().remove(cardToPlay);
+        return cardToPlay;
     }
 }

@@ -15,7 +15,7 @@ abstract class AbstractPlayerTest {
 
     @Test
     void canGivePlayerACard() {
-        Card expectedCard = new Card(Suit.DIAMONDS, Rank.ACE);
+        Card expectedCard = new Card(Rank.ACE, Suit.DIAMONDS);
 
         getPlayer().giveCard(expectedCard);
 
@@ -24,7 +24,7 @@ abstract class AbstractPlayerTest {
 
     @Test
     void canGivePlayerManyCards() {
-        List<Card> expectedCards = List.of(new Card(Suit.DIAMONDS, Rank.ACE), new Card(Suit.DIAMONDS, Rank.TWO));
+        List<Card> expectedCards = List.of(new Card(Rank.ACE, Suit.DIAMONDS), new Card(Rank.TWO, Suit.DIAMONDS));
 
         getPlayer().giveCards(expectedCards);
 

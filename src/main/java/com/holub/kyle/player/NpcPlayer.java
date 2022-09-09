@@ -1,10 +1,12 @@
 package com.holub.kyle.player;
 
 import com.holub.kyle.deck.Card;
+import com.holub.kyle.deck.enums.Suit;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 @Slf4j
@@ -20,13 +22,20 @@ public class NpcPlayer extends Player {
 
     @Override
     public int getBid() {
-        log.info(String.format("%s bid 0", this));
-        return 0;
+        int bound = getHand().size() / 2;
+        int bid = 0;
+        if (bound > 0) {
+            bid = RAND.nextInt(bound);
+        }
+        log.info(String.format("%s bid %s", this, bid));
+        return bid;
     }
 
     @Override
-    public Card playCard() {
-        Card cardToPlay = getHand().get(0);
+    public Card playCardEnforced(List<Card> playableCards, Suit leadSuit, Suit trumpSuit) {
+        int numPlayableCards = playableCards.size();
+        Card cardToPlay = playableCards.get(RAND.nextInt(numPlayableCards));
+        getHand().remove(cardToPlay);
         log.info(String.format("%s played %s", this, cardToPlay));
         return cardToPlay;
     }

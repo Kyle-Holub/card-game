@@ -4,44 +4,44 @@ import com.holub.kyle.deck.Card;
 import com.holub.kyle.game.logic.round.sequence.BidSequence;
 import com.holub.kyle.game.logic.round.sequence.DealSequence;
 import com.holub.kyle.game.logic.round.sequence.PlaySequence;
-import com.holub.kyle.game.logic.trick.TrickEvaluator;
+import com.holub.kyle.game.logic.round.sequence.ScoreSequence;
 import com.holub.kyle.player.Player;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Getter
 public class Round {
 
-    private final int roundNumber;
+    private final int numTricks;
     private final List<Player> players;
 
     private Map<Player, Integer> bidMap;
-    private Map<Card, Player> playedCardsMap;
-    private Player winner;
+    private Map<Player, Integer> trickMap;
 
-    public Round(int newRoundNumber, List<Player> newPlayers) {
-        roundNumber = newRoundNumber;
+    public Round(int numTricks, List<Player> newPlayers) {
+        this.numTricks = numTricks;
         players = newPlayers;
         bidMap = new HashMap<>();
-        playedCardsMap = new HashMap<>();
+        trickMap = new HashMap<>();
     }
 
     public void executeRound() {
+        log.info(String.format("Starting round with %s cards", numTricks));
         DealSequence dealSequence = new DealSequence();
-        dealSequence.dealCards(players, roundNumber);
+        Card trumpCard = dealSequence.dealCards(players, numTricks);
 
         BidSequence bidSequence = new BidSequence(players);
         bidMap = bidSequence.takeBids();
 
-        PlaySequence playSequence = new PlaySequence(players);
-        playedCardsMap = playSequence.playCards();
+        PlaySequence playSequence = new PlaySequence();
+        trickMap = playSequence.playCards(players, numTricks, trumpCard);
 
-        TrickEvaluator trickEvaluator = new TrickEvaluator();
-        winner = trickEvaluator.scoreTrick(playedCardsMap);
-
-        // tally scores for round
+        ScoreSequence scoreSequence = new ScoreSequence();
+        scoreSequence.tallyScores(players, bidMap, trickMap);
     }
 }
