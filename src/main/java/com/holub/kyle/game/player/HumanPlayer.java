@@ -19,7 +19,6 @@ public class HumanPlayer extends Player {
     @Override
     public int getBid() {
         String input = scanner.nextLine();
-
         return Integer.parseInt(input);
     }
 

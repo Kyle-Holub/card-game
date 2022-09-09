@@ -6,17 +6,26 @@ import java.util.List;
 import java.util.Map;
 
 public class ScoreSequence {
-
     public void tallyScores(List<Player> players, Map<Player, Integer> bidMap, Map<Player, Integer> trickMap) {
-        players.forEach(player -> {
-            int playerBid = bidMap.get(player);
-            int tricks = trickMap.get(player);
-            if (playerBid == tricks) {
-                player.addScore(10 + 2 * tricks);
-            } else {
-                int numOverUnder = Math.abs(tricks - playerBid);
-                player.addScore(-5 * numOverUnder);
-            }
-        });
+        players.forEach(player -> tallyScore(bidMap, trickMap, player));
+    }
+
+    private static void tallyScore(Map<Player, Integer> bidMap, Map<Player, Integer> trickMap, Player player) {
+        int playerBid = bidMap.get(player);
+        int tricks = trickMap.get(player);
+        if (playerBid == tricks) {
+            addPoints(player, tricks);
+        } else {
+            deductPoints(player, playerBid, tricks);
+        }
+    }
+
+    private static void addPoints(Player player, int tricks) {
+        player.addScore(10 + 2 * tricks);
+    }
+
+    private static void deductPoints(Player player, int playerBid, int tricks) {
+        int numOverUnder = Math.abs(tricks - playerBid);
+        player.addScore(-5 * numOverUnder);
     }
 }

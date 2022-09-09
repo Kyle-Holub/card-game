@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -25,7 +26,6 @@ public class RoundManager {
         log.info("HIGHEST SCORE:" + highestScore);
     }
 
-
     public int playRounds() {
         log.info("Starting...");
         List<Player> players = IntStream.range(0, 4).mapToObj(i -> new NpcPlayer()).collect(Collectors.toList());
@@ -41,8 +41,12 @@ public class RoundManager {
 
         log.info("SCORES:");
         players.forEach(player -> log.info(player.toString() + ": " + player.getScore()));
-        Player winner = players.stream().max(Comparator.comparing(Player::getScore)).get();
-        log.info("Winner is " + winner + " with " + winner.getScore());
-        return winner.getScore();
+        Optional<Player> winnerO = players.stream().max(Comparator.comparing(Player::getScore));
+        if (winnerO.isPresent()) {
+            Player winner = winnerO.get();
+            log.info("Winner is " + winner + " with " + winner.getScore());
+            return winner.getScore();
+        }
+        throw new NullPointerException("Could not find winner");
     }
 }

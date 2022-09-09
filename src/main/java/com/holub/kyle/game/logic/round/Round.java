@@ -32,8 +32,8 @@ public class Round {
 
     public void executeRound() {
         log.info(String.format("Starting round with %s cards", numTricks));
-        DealSequence dealSequence = new DealSequence();
-        Card trumpCard = dealSequence.dealCards(players, numTricks);
+        DealSequence dealSequence = new DealSequence(numTricks);
+        Card trumpCard = dealSequence.dealCards(players);
 
         BidSequence bidSequence = new BidSequence(players);
         bidMap = bidSequence.takeBids();

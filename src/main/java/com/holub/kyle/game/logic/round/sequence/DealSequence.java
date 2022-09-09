@@ -9,14 +9,18 @@ import java.util.stream.IntStream;
 
 public class DealSequence {
 
-    private final Deck deck = new Deck();
-
-    public Card dealCards(List<Player> players, int numCardsToGive) {
-        players.forEach(player -> giveCards(player, numCardsToGive));
+    private final Deck deck;
+    private final int numCardsToGive;
+    public DealSequence(int numCardsToGive) {
+        deck = new Deck();
+        this.numCardsToGive = numCardsToGive;
+    }
+    public Card dealCards(List<Player> players) {
+        players.forEach(this::giveCards);
         return deck.drawCard();
     }
 
-    private void giveCards(Player player, int numCardsToGive) {
+    private void giveCards(Player player) {
         IntStream.range(0, numCardsToGive).forEach(i -> player.giveCard(deck.drawCard()));
     }
 }

@@ -1,7 +1,6 @@
 package com.holub.kyle.game.logic.round.sequence;
 
 import com.holub.kyle.game.player.Player;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -15,26 +14,23 @@ class DealSequenceTest {
 
     DealSequence dealSequence;
 
-    @BeforeEach
-    void setUp() {
-        dealSequence = new DealSequence();
-    }
-
     @ParameterizedTest
     @CsvSource({"1,3", "1,4", "1,5", "2,5", "3,5", "4,5"})
-    void canDealCorrectNumberOfCardsBasedOnRoundNumber(int roundNumber, int numPlayers) {
+    void canDealCorrectNumberOfCardsBasedOnRoundNumber(int numCardsToGive, int numPlayers) {
+        dealSequence = new DealSequence(numCardsToGive);
         List<Player> players = buildPlayerList(numPlayers);
 
-        dealSequence.dealCards(players, roundNumber);
+        dealSequence.dealCards(players);
 
-        assertThat(players).flatExtracting(Player::getHand).hasSize(roundNumber * numPlayers);
+        assertThat(players).flatExtracting(Player::getHand).hasSize(numCardsToGive * numPlayers);
     }
 
     @Test
     void eachPlayerDealt5CardsForRound5() {
+        dealSequence = new DealSequence(5);
         List<Player> players = buildPlayerList(5);
 
-        dealSequence.dealCards(players, 5);
+        dealSequence.dealCards(players);
 
         assertThat(players.get(0).getHand()).hasSize(5);
         assertThat(players.get(1).getHand()).hasSize(5);
