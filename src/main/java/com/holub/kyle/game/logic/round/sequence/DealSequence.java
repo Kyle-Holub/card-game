@@ -1,8 +1,8 @@
 package com.holub.kyle.game.logic.round.sequence;
 
-import com.holub.kyle.deck.Card;
-import com.holub.kyle.deck.Deck;
-import com.holub.kyle.player.Player;
+import com.holub.kyle.game.deck.Card;
+import com.holub.kyle.game.deck.Deck;
+import com.holub.kyle.game.player.Player;
 
 import java.util.List;
 import java.util.stream.IntStream;

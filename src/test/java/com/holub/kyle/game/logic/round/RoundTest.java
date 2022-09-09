@@ -1,8 +1,7 @@
-package com.holub.kyle.game;
+package com.holub.kyle.game.logic.round;
 
-import com.holub.kyle.game.logic.round.Round;
-import com.holub.kyle.player.NpcPlayer;
-import com.holub.kyle.player.Player;
+import com.holub.kyle.game.player.NpcPlayer;
+import com.holub.kyle.game.player.Player;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;

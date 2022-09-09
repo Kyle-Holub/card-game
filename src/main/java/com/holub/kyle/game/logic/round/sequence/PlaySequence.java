@@ -1,8 +1,8 @@
 package com.holub.kyle.game.logic.round.sequence;
 
-import com.holub.kyle.deck.Card;
+import com.holub.kyle.game.deck.Card;
 import com.holub.kyle.game.logic.trick.TrickEvaluator;
-import com.holub.kyle.player.Player;
+import com.holub.kyle.game.player.Player;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
