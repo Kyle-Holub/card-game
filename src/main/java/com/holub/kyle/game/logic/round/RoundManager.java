@@ -7,11 +7,14 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Slf4j
 public class RoundManager {
+
+    Random rand = new Random();
 
     public void playGames(int numGames) {
         int highestScore = 0;
@@ -30,13 +33,13 @@ public class RoundManager {
         log.info("Starting...");
         List<Player> players = IntStream.range(0, 4).mapToObj(i -> new NpcPlayer()).collect(Collectors.toList());
 
-        for (int i = 8; i > 0; i--) {
-            Round round = new Round(i, players);
-            round.executeRound();
+        setRandomDealer(players);
+
+        for (int numCards = 8; numCards > 0; numCards--) {
+            executeRound(players, numCards);
         }
-        for (int i = 1; i < 9; i++) {
-            Round round = new Round(i, players);
-            round.executeRound();
+        for (int numCards = 2; numCards < 9; numCards++) {
+            executeRound(players, numCards);
         }
 
         log.info("SCORES:");
@@ -48,5 +51,21 @@ public class RoundManager {
             return winner.getScore();
         }
         throw new NullPointerException("Could not find winner");
+    }
+
+    private void executeRound(List<Player> players, int numCards) {
+        Round round = new Round(numCards, players);
+        round.executeRound();
+        incrementDealer(players);
+    }
+
+    private void incrementDealer(List<Player> players) {
+        // TODO
+    }
+
+    private void setRandomDealer(List<Player> players) {
+        Player dealer = players.get(rand.nextInt(players.size() - 1));
+        log.info(String.format("%s is the dealer", dealer));
+        dealer.setDealer();
     }
 }

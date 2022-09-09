@@ -1,6 +1,7 @@
 package com.holub.kyle.game.logic.round.sequence;
 
 import com.holub.kyle.game.deck.Card;
+import com.holub.kyle.game.deck.enums.Suit;
 import com.holub.kyle.game.logic.trick.TrickEvaluator;
 import com.holub.kyle.game.player.Player;
 import lombok.extern.slf4j.Slf4j;
@@ -18,31 +19,31 @@ public class PlaySequence {
 
     private static final BiFunction<Player, Integer, Integer> addTrickWonFunction = (playerKey, trickValue) -> trickValue + 1;
 
-    public Map<Player, Integer> playCards(List<Player> players, int numTricks, Card trumpCard) {
-        Map<Player, Integer> trickMap = initTrickMap(players);
-        IntStream.range(0, numTricks).forEach(i -> playTrick(players, trumpCard, trickMap));
-        return trickMap;
+    public Map<Player, Integer> playCards(List<Player> players, int numTricks, Suit trumpSuit) {
+        Map<Player, Integer> tricksWonMap = initTrickMap(players);
+        IntStream.range(0, numTricks).forEach(i -> playTrick(players, trumpSuit, tricksWonMap));
+        return tricksWonMap;
     }
 
-    private void playTrick(List<Player> players, Card trumpCard, Map<Player, Integer> trickMap) {
-        Map<Card, Player> playedCardsMap = playCardFromEachPlayer(players, trumpCard);
-        evaluateWinner(trumpCard, trickMap, playedCardsMap);
+    private void playTrick(List<Player> players, Suit trumpSuit, Map<Player, Integer> trickMap) {
+        Map<Card, Player> playedCardsMap = playCardFromEachPlayer(players, trumpSuit);
+        evaluateWinner(trumpSuit, trickMap, playedCardsMap);
     }
 
-    private Map<Card, Player> playCardFromEachPlayer(List<Player> players, Card trumpCard) {
+    private Map<Card, Player> playCardFromEachPlayer(List<Player> players, Suit trumpSuit) {
         Map<Card, Player> playedCardsMap = new HashMap<>();
-        Card leadCard = players.get(0).playCard(null, trumpCard.getSuit());
+        Card leadCard = players.get(0).playCard(null, trumpSuit);
         playedCardsMap.put(leadCard, players.get(0));
         for (int j = 1; j < players.size(); j++) {
-            playedCardsMap.put(players.get(j).playCard(leadCard.getSuit(), trumpCard.getSuit()), players.get(j));
+            playedCardsMap.put(players.get(j).playCard(leadCard.getSuit(), trumpSuit), players.get(j));
         }
         return playedCardsMap;
     }
 
-    private void evaluateWinner(Card trumpCard, Map<Player, Integer> trickMap, Map<Card, Player> playedCardsMap) {
+    private void evaluateWinner(Suit trumpSuit, Map<Player, Integer> trickMap, Map<Card, Player> playedCardsMap) {
         log.info("Evaluating trick");
         TrickEvaluator trickEvaluator = new TrickEvaluator();
-        Player winner = trickEvaluator.scoreTrick(playedCardsMap, trumpCard.getSuit());
+        Player winner = trickEvaluator.scoreTrick(playedCardsMap, trumpSuit);
         trickMap.compute(winner, addTrickWonFunction);
 
         List<Card> winningCard = playedCardsMap.entrySet()

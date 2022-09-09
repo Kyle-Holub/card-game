@@ -1,8 +1,6 @@
 package com.holub.kyle.game.logic.round.sequence;
 
-import com.holub.kyle.game.deck.Card;
 import com.holub.kyle.game.deck.Deck;
-import com.holub.kyle.game.deck.enums.Rank;
 import com.holub.kyle.game.deck.enums.Suit;
 import com.holub.kyle.game.player.Player;
 import com.holub.kyle.game.testutil.PlayerTestUtil;
@@ -28,7 +26,7 @@ class PlaySequenceTest {
         Deck deck = new Deck();
         players.forEach(player -> player.giveCard(deck.drawCard()));
 
-        Map<Player, Integer> trickMap = playSequence.playCards(players, 1, new Card(Rank.TWO, Suit.DIAMONDS));
+        Map<Player, Integer> trickMap = playSequence.playCards(players, 1, Suit.DIAMONDS);
 
         assertThat(trickMap).hasSize(5);
     }

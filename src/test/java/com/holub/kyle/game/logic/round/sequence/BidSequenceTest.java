@@ -25,6 +25,11 @@ class BidSequenceTest {
         assertThat(bidMap).containsValue(1);
     }
 
+    @Test
+    void lastPlayerHasCatch() {
+
+    }
+
     private List<Player> buildMockPlayerList(int numPlayers) {
         return IntStream.range(0, numPlayers).mapToObj(this::newMockPlayer).collect(Collectors.toList());
 

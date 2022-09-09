@@ -39,7 +39,7 @@ public class Round {
         bidMap = bidSequence.takeBids();
 
         PlaySequence playSequence = new PlaySequence();
-        trickMap = playSequence.playCards(players, numTricks, trumpCard);
+        trickMap = playSequence.playCards(players, numTricks, trumpCard.getSuit());
 
         ScoreSequence scoreSequence = new ScoreSequence();
         scoreSequence.tallyScores(players, bidMap, trickMap);
