@@ -12,14 +12,22 @@ import java.util.stream.Collectors;
 public class CardComparator {
     public Card compare(List<Card> cards, Suit trumpSuit) {
         validateComparisonInput(cards);
-        List<Card> trumpSuitCards = cards.stream().filter(isSuit(trumpSuit)).collect(Collectors.toList());
+        List<Card> trumpSuitCards = filterSuit(cards, trumpSuit);
         if (trumpSuitCards.isEmpty()) {
             Suit initialSuit = cards.get(0).getSuit();
-            List<Card> trickSuitCards = cards.stream().filter(isSuit(initialSuit)).collect(Collectors.toList());
+            List<Card> trickSuitCards = filterSuit(cards, initialSuit);
             return compareAgainstSuitAndReturn(trickSuitCards);
         } else {
             return compareAgainstSuitAndReturn(trumpSuitCards);
         }
+    }
+
+    public static List<Card> filterSuit(List<Card> cardList, Suit leadSuit) {
+        return cardList.stream().filter(CardComparator.filterSuit(leadSuit)).collect(Collectors.toList());
+    }
+
+    private static Predicate<Card> filterSuit(Suit suit) {
+        return card -> card.getSuit().equals(suit);
     }
 
     private static Card compareAgainstSuitAndReturn(List<Card> trumpSuitCards) {
@@ -28,10 +36,6 @@ public class CardComparator {
             return winningCard.get();
         }
         throw new IllegalArgumentException(String.format("Unknown error - no winning card from: %s", trumpSuitCards));
-    }
-
-    private Predicate<Card> isSuit(Suit suit) {
-        return card -> card.getSuit().equals(suit);
     }
 
     private static void validateComparisonInput(List<Card> cards) {

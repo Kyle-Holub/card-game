@@ -1,12 +1,14 @@
 package com.holub.kyle.player;
 
+import com.holub.kyle.deck.Card;
+import com.holub.kyle.deck.enums.Rank;
+import com.holub.kyle.deck.enums.Suit;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
+import static com.holub.kyle.assertions.CardAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
@@ -19,15 +21,25 @@ class NpcPlayerTest {
         player.setName("Bob");
 
         log.info(player.toString());
-        assertThat(player.toString()).isEqualTo("Bob");
+        assertThat(player.toString()).hasToString("Bob");
     }
 
     @Test
-    void npcPlayerHasRandomName() {
-        List<NpcPlayer> players = IntStream.range(0, 20).mapToObj(i -> new NpcPlayer()).collect(Collectors.toList());
+    void npcPlayerHasRandomNameByDefault() {
+        NpcPlayer player = new NpcPlayer();
 
-        players.forEach(player -> log.info(player.toString()));
-        assertThat(players).extracting(Player::toString).isNotEmpty();
+        log.info(player.toString());
+        assertThat(player.toString()).isNotEmpty();
+    }
+
+    @Test
+    void playerCardChoiceEnforcedByInitialCardSuit() {
+        NpcPlayer player = new NpcPlayer();
+        player.giveCards(List.of(new Card(Rank.ACE, Suit.SPADES), new Card(Rank.ACE, Suit.CLUBS), new Card(Rank.TWO, Suit.DIAMONDS)));
+
+        Card playedCard = player.playCard(Suit.DIAMONDS, Suit.HEARTS);
+
+        assertThat(playedCard).hasRank(Rank.TWO).hasSuit(Suit.DIAMONDS);
     }
 
 }

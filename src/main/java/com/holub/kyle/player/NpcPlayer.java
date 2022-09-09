@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 @Slf4j
@@ -31,9 +32,9 @@ public class NpcPlayer extends Player {
     }
 
     @Override
-    public Card playCard(Suit leadSuit, Suit trumpSuit) {
-        int numCardsInHand = getHand().size();
-        Card cardToPlay = getHand().get(RAND.nextInt(numCardsInHand));
+    public Card playCardEnforced(List<Card> playableCards, Suit leadSuit, Suit trumpSuit) {
+        int numPlayableCards = playableCards.size();
+        Card cardToPlay = playableCards.get(RAND.nextInt(numPlayableCards));
         getHand().remove(cardToPlay);
         log.info(String.format("%s played %s", this, cardToPlay));
         return cardToPlay;
