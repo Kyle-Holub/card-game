@@ -1,45 +1,25 @@
 package com.holub.kyle.game.neural.netcore;
 
+import lombok.Data;
+
+@Data
 public class Connection {
+    private final String id;
+    private final ProcessingUnit fromNeuron;
+    private final ProcessingUnit toNeuron;
 
-    protected Neuron fromNeuron;
+    private double weight = 0;
+    private double deltaWeight = 0;
+    private double prevDeltaWeight = 0;
 
-    protected Neuron toNeuron;
-
-    protected double weight;
-
-    public Connection(Neuron fromNeuron, Neuron toNeuron) {
-        this.fromNeuron = fromNeuron;
-        this.toNeuron = toNeuron;
-        this.weight = Math.random();
+    public Connection(String id, ProcessingUnit fromN, ProcessingUnit toN) {
+        this.id = id;
+        fromNeuron = fromN;
+        toNeuron = toN;
     }
 
-    public Connection(Neuron fromNeuron, Neuron toNeuron, double weight) {
-        this(fromNeuron, toNeuron);
-        this.weight = weight;
-    }
-
-    public double getWeight() {
-        return weight;
-    }
-
-    public void setWeight(double weight) {
-        this.weight = weight;
-    }
-
-    public double getInput() {
-        return fromNeuron.calculateOutput();
-    }
-
-    public double getWeightedInput() {
-        return fromNeuron.calculateOutput() * weight;
-    }
-
-    public Neuron getFromNeuron() {
-        return fromNeuron;
-    }
-
-    public Neuron getToNeuron() {
-        return toNeuron;
+    public void setDeltaWeight(double deltaWeight) {
+        this.prevDeltaWeight = this.deltaWeight;
+        this.deltaWeight = deltaWeight;
     }
 }
