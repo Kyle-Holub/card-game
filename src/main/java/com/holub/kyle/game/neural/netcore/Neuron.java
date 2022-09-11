@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 @Data
-public class Neuron implements ProcessingUnit {
+public class Neuron {
 
     private final String id;
     private double output;
@@ -32,24 +32,22 @@ public class Neuron implements ProcessingUnit {
         this.activationFunction = activationFunction;
     }
 
-    public Neuron(String id, List<ProcessingUnit> inNeurons, ActivationFunction activationFunction) {
+    public Neuron(String id, List<Neuron> inNeurons, ActivationFunction activationFunction) {
         this.id = id;
         this.activationFunction = activationFunction;
         addInConnections(inNeurons);
     }
 
-    public Neuron(String id, List<ProcessingUnit> inNeurons, ProcessingUnit bias,
+    public Neuron(String id, List<Neuron> inNeurons, Neuron bias,
                   ActivationFunction activationFunction) {
         this(id, inNeurons, activationFunction);
         addBiasConnection(bias);
     }
 
-    @Override
     public String getId() {
         return id;
     }
 
-    @Override
     public void calculateOutput() {
         double weightedSum = 0;
         for (Connection con : inputConnections) {
@@ -66,36 +64,33 @@ public class Neuron implements ProcessingUnit {
         output = activationFunction.calculateOutput(weightedSum);
     }
 
-    private void addInConnections(List<ProcessingUnit> inNeurons) {
-        for (ProcessingUnit neuron : inNeurons) {
+    private void addInConnections(List<Neuron> inNeurons) {
+        for (Neuron neuron : inNeurons) {
             Connection con = new Connection(RandomGenerator.generateId(), neuron, this);
             inputConnections.add(con);
             connectionLookup.put(neuron.getId(), con);
         }
     }
 
-    @Override
     public Connection getConnection(String neuronId) {
         return connectionLookup.get(neuronId);
     }
 
-    private void addInConnection(ProcessingUnit neuron) {
+    private void addInConnection(Neuron neuron) {
         Connection con = new Connection(RandomGenerator.generateId(), neuron, this);
         inputConnections.add(con);
     }
 
-    @Override
     public List<Connection> getInputConnections() {
         return inputConnections;
     }
 
-    private void addBiasConnection(ProcessingUnit neuron) {
+    private void addBiasConnection(Neuron neuron) {
         Connection con = new Connection(RandomGenerator.generateId(), neuron, this);
         biasConnection = con;
         inputConnections.add(con);
     }
 
-    @Override
     public double getOutput() {
         return output;
     }
