@@ -2,12 +2,17 @@ package com.holub.kyle.game.player;
 
 import com.holub.kyle.game.deck.Card;
 import com.holub.kyle.game.deck.enums.Suit;
+import com.holub.kyle.game.neural.NeuralNet;
+import com.holub.kyle.game.neural.netcore.NeuralNetLayer;
+import com.holub.kyle.game.neural.netcore.Neuron;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Slf4j
 @EqualsAndHashCode(callSuper = true)
@@ -15,9 +20,22 @@ public class NpcPlayer extends Player {
 
     private static final Random RAND = new Random();
 
+    private final NeuralNet net;
+
     public NpcPlayer() {
         super();
         this.setName(genRandomName());
+        
+        List<Neuron> neurons = IntStream.range(0, 110).mapToObj(i -> new Neuron()).collect(Collectors.toList());
+        NeuralNetLayer inputLayer = new NeuralNetLayer("input", neurons);
+
+        List<Neuron> hiddenLayerNeurons = IntStream.range(0, 110).mapToObj(i -> new Neuron()).collect(Collectors.toList());
+        NeuralNetLayer hiddenLayer = new NeuralNetLayer("hidden", hiddenLayerNeurons);
+
+        List<Neuron> outputLayerNeurons = IntStream.range(0, 8).mapToObj(i -> new Neuron()).collect(Collectors.toList());
+        NeuralNetLayer outputLayer = new NeuralNetLayer("output", outputLayerNeurons);
+
+        net = new NeuralNet("id", inputLayer, List.of(hiddenLayer), outputLayer);
     }
 
     @Override
