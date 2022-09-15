@@ -2,9 +2,9 @@ package com.holub.kyle.game.logic.round.sequence;
 
 import com.holub.kyle.game.player.NpcPlayer;
 import com.holub.kyle.game.player.Player;
+import com.holub.kyle.game.player.PlayerQueue;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -17,7 +17,7 @@ class BidSequenceTest {
 
     @Test
     void canTakeBids() {
-        List<Player> players = buildMockPlayerList(5);
+        PlayerQueue players = buildMockPlayerQueue(5);
         BidSequence bidSequence = new BidSequence(players);
 
         Map<Player, Integer> bidMap = bidSequence.takeBids();
@@ -27,11 +27,11 @@ class BidSequenceTest {
 
     @Test
     void lastPlayerHasCatch() {
-
+        // TODO
     }
 
-    private List<Player> buildMockPlayerList(int numPlayers) {
-        return IntStream.range(0, numPlayers).mapToObj(this::newMockPlayer).collect(Collectors.toList());
+    private PlayerQueue buildMockPlayerQueue(int numPlayers) {
+        return new PlayerQueue(IntStream.range(0, numPlayers).mapToObj(this::newMockPlayer).collect(Collectors.toList()));
 
     }
 

@@ -16,8 +16,10 @@ public abstract class Player {
     private int score;
     @Setter
     private String name;
+    @Setter
     private boolean isDealer;
-    private boolean leadPlayer;
+    @Setter
+    private boolean isLeadPlayer;
 
     public abstract int getBid();
 
@@ -51,9 +53,5 @@ public abstract class Player {
         } else {
             return cardsMatchingLeadSuit;
         }
-    }
-
-    public void setDealer() {
-        isDealer = true;
     }
 }

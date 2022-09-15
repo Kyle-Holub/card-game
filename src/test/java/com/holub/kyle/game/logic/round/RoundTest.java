@@ -1,36 +1,32 @@
 package com.holub.kyle.game.logic.round;
 
-import com.holub.kyle.game.player.NpcPlayer;
-import com.holub.kyle.game.player.Player;
+import com.holub.kyle.game.player.PlayerQueue;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
+import static com.holub.kyle.game.testutil.PlayerTestUtil.buildPlayerQueue;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class RoundTest {
     @ParameterizedTest
     @ValueSource(ints = {3, 4, 5, 6})
     void canInitRoundWithCorrectNumPlayers(int numPlayers) {
-        List<Player> playerList = buildPlayerList(numPlayers);
+        PlayerQueue playerList = buildPlayerQueue(numPlayers);
 
         Round round = new Round(1, playerList);
 
-        assertThat(round.getPlayers()).hasSize(numPlayers);
+        assertThat(round.getPlayers().getPlayerQ()).hasSize(numPlayers);
     }
 
 
     @Test
     void canPlayCards() {
-        Round round = new Round(1, buildPlayerList(5));
+        Round round = new Round(1, buildPlayerQueue(5));
 
         round.executeRound();
 
-        assertThat(round.getPlayers().get(0).getHand()).isEmpty();
+        assertThat(round.getPlayers().getCurrentPlayer().getHand()).isEmpty();
     }
 
 //    @Test
@@ -69,8 +65,4 @@ class RoundTest {
 //
 //        assertThat(round.getWinner()).isEqualTo(mockPlayerList.get(2));
 //    }
-
-    private List<Player> buildPlayerList(int numPlayers) {
-        return IntStream.range(0, numPlayers).mapToObj(i -> new NpcPlayer()).collect(Collectors.toList());
-    }
 }

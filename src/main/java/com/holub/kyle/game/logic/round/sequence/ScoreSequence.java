@@ -1,13 +1,13 @@
 package com.holub.kyle.game.logic.round.sequence;
 
 import com.holub.kyle.game.player.Player;
+import com.holub.kyle.game.player.PlayerQueue;
 
-import java.util.List;
 import java.util.Map;
 
 public class ScoreSequence {
-    public void tallyScores(List<Player> players, Map<Player, Integer> bidMap, Map<Player, Integer> trickMap) {
-        players.forEach(player -> tallyScore(bidMap, trickMap, player));
+    public void tallyScores(PlayerQueue players, Map<Player, Integer> bidMap, Map<Player, Integer> trickMap) {
+        players.getPlayerQ().forEach(player -> tallyScore(bidMap, trickMap, player));
     }
 
     private static void tallyScore(Map<Player, Integer> bidMap, Map<Player, Integer> trickMap, Player player) {

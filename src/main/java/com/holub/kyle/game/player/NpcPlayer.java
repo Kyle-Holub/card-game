@@ -7,13 +7,13 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
+
+import static com.holub.kyle.game.util.RandomUtil.RANDOM;
+
 
 @Slf4j
 @EqualsAndHashCode(callSuper = true)
 public class NpcPlayer extends Player {
-
-    private static final Random RAND = new Random();
 
 //    private final NeuralNet net;
 
@@ -38,7 +38,7 @@ public class NpcPlayer extends Player {
         int bound = getHand().size() / 2;
         int bid = 0;
         if (bound > 0) {
-            bid = RAND.nextInt(bound);
+            bid = RANDOM.nextInt(bound);
         }
         log.info(String.format("%s bid %s", this, bid));
         return bid;
@@ -47,16 +47,20 @@ public class NpcPlayer extends Player {
     @Override
     public Card playCardEnforced(List<Card> playableCards, Suit leadSuit, Suit trumpSuit) {
         int numPlayableCards = playableCards.size();
-        Card cardToPlay = playableCards.get(RAND.nextInt(numPlayableCards));
-        getHand().remove(cardToPlay);
-        log.info(String.format("%s played %s", this, cardToPlay));
-        return cardToPlay;
+        if (numPlayableCards > 0) {
+            Card cardToPlay = playableCards.get(RANDOM.nextInt(numPlayableCards));
+            getHand().remove(cardToPlay);
+            log.info(String.format("%s played %s", this, cardToPlay));
+            return cardToPlay;
+        } else {
+            throw new RuntimeException("No cards to play");
+        }
     }
 
     private String genRandomName() {
-        String firstName = Arrays.asList(NpcName.FirstNames.values()).get(RAND.nextInt(NpcName.FirstNames.values().length)).toString();
-        String lastNamePrefix = Arrays.asList(NpcName.LastNamePrefix.values()).get(RAND.nextInt(NpcName.LastNamePrefix.values().length)).toString();
-        String lastName = Arrays.asList(NpcName.LastName.values()).get(RAND.nextInt(NpcName.LastName.values().length)).toString();
+        String firstName = Arrays.asList(NpcName.FirstNames.values()).get(RANDOM.nextInt(NpcName.FirstNames.values().length)).toString();
+        String lastNamePrefix = Arrays.asList(NpcName.LastNamePrefix.values()).get(RANDOM.nextInt(NpcName.LastNamePrefix.values().length)).toString();
+        String lastName = Arrays.asList(NpcName.LastName.values()).get(RANDOM.nextInt(NpcName.LastName.values().length)).toString();
         return String.format("%s %s%s", firstName, lastNamePrefix, lastName);
     }
 }
