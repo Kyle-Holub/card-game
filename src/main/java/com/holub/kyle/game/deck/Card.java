@@ -1,7 +1,7 @@
-package com.holub.kyle.deck;
+package com.holub.kyle.game.deck;
 
-import com.holub.kyle.deck.enums.Rank;
-import com.holub.kyle.deck.enums.Suit;
+import com.holub.kyle.game.deck.enums.Rank;
+import com.holub.kyle.game.deck.enums.Suit;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

@@ -1,8 +1,8 @@
-package com.holub.kyle.player;
+package com.holub.kyle.game.player;
 
-import com.holub.kyle.deck.Card;
-import com.holub.kyle.deck.enums.Rank;
-import com.holub.kyle.deck.enums.Suit;
+import com.holub.kyle.game.deck.Card;
+import com.holub.kyle.game.deck.enums.Rank;
+import com.holub.kyle.game.deck.enums.Suit;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

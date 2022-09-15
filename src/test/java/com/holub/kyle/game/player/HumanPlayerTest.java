@@ -1,4 +1,4 @@
-package com.holub.kyle.player;
+package com.holub.kyle.game.player;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

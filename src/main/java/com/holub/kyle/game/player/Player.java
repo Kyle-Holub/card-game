@@ -1,7 +1,7 @@
-package com.holub.kyle.player;
+package com.holub.kyle.game.player;
 
-import com.holub.kyle.deck.Card;
-import com.holub.kyle.deck.enums.Suit;
+import com.holub.kyle.game.deck.Card;
+import com.holub.kyle.game.deck.enums.Suit;
 import com.holub.kyle.game.logic.trick.CardComparator;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,6 +16,10 @@ public abstract class Player {
     private int score;
     @Setter
     private String name;
+    @Setter
+    private boolean isDealer;
+    @Setter
+    private boolean isLeadPlayer;
 
     public abstract int getBid();
 

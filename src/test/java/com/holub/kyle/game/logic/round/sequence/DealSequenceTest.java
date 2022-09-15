@@ -1,45 +1,57 @@
 package com.holub.kyle.game.logic.round.sequence;
 
-import com.holub.kyle.player.Player;
-import org.junit.jupiter.api.BeforeEach;
+import com.holub.kyle.game.player.Player;
+import com.holub.kyle.game.player.PlayerQueue;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.mockito.InOrder;
 
+import java.util.LinkedList;
 import java.util.List;
 
-import static com.holub.kyle.game.testutil.PlayerTestUtil.buildPlayerList;
+import static com.holub.kyle.game.testutil.PlayerTestUtil.buildPlayerQueue;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
 
 class DealSequenceTest {
 
-    DealSequence dealSequence;
-
-    @BeforeEach
-    void setUp() {
-        dealSequence = new DealSequence();
-    }
-
     @ParameterizedTest
     @CsvSource({"1,3", "1,4", "1,5", "2,5", "3,5", "4,5"})
-    void canDealCorrectNumberOfCardsBasedOnRoundNumber(int roundNumber, int numPlayers) {
-        List<Player> players = buildPlayerList(numPlayers);
+    void canDealCorrectNumberOfCardsBasedOnNumCardsToGive(int numCardsToGive, int numPlayers) {
+        DealSequence dealSequence = new DealSequence(numCardsToGive);
+        PlayerQueue players = buildPlayerQueue(numPlayers);
 
-        dealSequence.dealCards(players, roundNumber);
+        dealSequence.dealCards(players);
 
-        assertThat(players).flatExtracting(Player::getHand).hasSize(roundNumber * numPlayers);
+        assertThat(players.getPlayerQ()).flatExtracting(Player::getHand).hasSize(numCardsToGive * numPlayers);
     }
 
     @Test
-    void eachPlayerDealt5CardsForRound5() {
-        List<Player> players = buildPlayerList(5);
+    void dealerGivenCardsLast() {
+        DealSequence dealSequence = new DealSequence(1);
+        Player player1 = mock(Player.class);
+        Player player2 = mock(Player.class);
+        List<Player> playerList = List.of(player1, player2);
+        PlayerQueue playerQueue = new PlayerQueue(playerList);
+        playerQueue.setPlayerQ(new LinkedList<>(playerList));
+        InOrder dealerOrder = inOrder(player1, player2);
 
-        dealSequence.dealCards(players, 5);
+        dealSequence.dealCards(playerQueue);
 
-        assertThat(players.get(0).getHand()).hasSize(5);
-        assertThat(players.get(1).getHand()).hasSize(5);
-        assertThat(players.get(2).getHand()).hasSize(5);
-        assertThat(players.get(3).getHand()).hasSize(5);
-        assertThat(players.get(4).getHand()).hasSize(5);
+        dealerOrder.verify(player1).giveCard(any());
+        dealerOrder.verify(player2).giveCard(any());
+    }
+
+    @Test
+    void givenFiveCardsToGive_eachPlayerDealtFiveCards() {
+        DealSequence dealSequence = new DealSequence(5);
+        PlayerQueue players = buildPlayerQueue(5);
+
+        dealSequence.dealCards(players);
+
+        players.getDealerQ().forEach(player -> assertThat(player.getHand()).hasSize(5));
     }
 }

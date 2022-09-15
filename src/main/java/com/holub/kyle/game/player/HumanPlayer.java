@@ -1,7 +1,7 @@
-package com.holub.kyle.player;
+package com.holub.kyle.game.player;
 
-import com.holub.kyle.deck.Card;
-import com.holub.kyle.deck.enums.Suit;
+import com.holub.kyle.game.deck.Card;
+import com.holub.kyle.game.deck.enums.Suit;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -19,7 +19,6 @@ public class HumanPlayer extends Player {
     @Override
     public int getBid() {
         String input = scanner.nextLine();
-
         return Integer.parseInt(input);
     }
 

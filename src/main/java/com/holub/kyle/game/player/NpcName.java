@@ -1,4 +1,4 @@
-package com.holub.kyle.player;
+package com.holub.kyle.game.player;
 
 @SuppressWarnings("SpellCheckingInspection")
 public class NpcName {

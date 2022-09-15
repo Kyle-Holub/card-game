@@ -1,22 +1,27 @@
 package com.holub.kyle.game.logic.round.sequence;
 
-import com.holub.kyle.deck.Card;
-import com.holub.kyle.deck.Deck;
-import com.holub.kyle.player.Player;
+import com.holub.kyle.game.deck.Card;
+import com.holub.kyle.game.deck.Deck;
+import com.holub.kyle.game.player.PlayerQueue;
 
-import java.util.List;
 import java.util.stream.IntStream;
 
 public class DealSequence {
 
-    private final Deck deck = new Deck();
+    private final Deck deck;
+    private final int numCardsToGive;
 
-    public Card dealCards(List<Player> players, int numCardsToGive) {
-        players.forEach(player -> giveCards(player, numCardsToGive));
+    public DealSequence(int numCardsToGive) {
+        deck = new Deck();
+        this.numCardsToGive = numCardsToGive;
+    }
+
+    public Card dealCards(PlayerQueue players) {
+        IntStream.range(0, numCardsToGive).forEach(i -> giveEachPlayerCard(players));
         return deck.drawCard();
     }
 
-    private void giveCards(Player player, int numCardsToGive) {
-        IntStream.range(0, numCardsToGive).forEach(i -> player.giveCard(deck.drawCard()));
+    private void giveEachPlayerCard(PlayerQueue players) {
+        players.getPlayerQ().forEach(player -> player.giveCard(deck.drawCard()));
     }
 }
