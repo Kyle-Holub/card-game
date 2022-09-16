@@ -18,7 +18,7 @@ class BidSequenceTest {
     @Test
     void canTakeBids() {
         PlayerQueue players = buildMockPlayerQueue(5);
-        BidSequence bidSequence = new BidSequence(players);
+        BidSequence bidSequence = new BidSequence(players, 8);
 
         Map<Player, Integer> bidMap = bidSequence.takeBids();
 
@@ -27,12 +27,16 @@ class BidSequenceTest {
 
     @Test
     void lastPlayerHasCatch() {
-        // TODO
+        PlayerQueue players = buildMockPlayerQueue(3);
+        BidSequence bidSequence = new BidSequence(players, 3);
+
+        Map<Player, Integer> bidMap = bidSequence.takeBids();
+
+        assertThat(bidMap).containsValues(1, 1, 0);
     }
 
     private PlayerQueue buildMockPlayerQueue(int numPlayers) {
         return new PlayerQueue(IntStream.range(0, numPlayers).mapToObj(this::newMockPlayer).collect(Collectors.toList()));
-
     }
 
     private NpcPlayer newMockPlayer(int i) {

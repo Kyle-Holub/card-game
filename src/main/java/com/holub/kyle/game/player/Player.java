@@ -23,6 +23,14 @@ public abstract class Player {
 
     public abstract int getBid();
 
+    public int getBidWithCatch(int cannotBid) {
+        int bid = getBid();
+        if (bid == cannotBid) {
+            bid++;
+        }
+        return bid;
+    }
+
     protected abstract Card playCardEnforced(List<Card> playableCards, Suit leadSuit, Suit trumpSuit);
 
     public Card playCard(Suit leadSuit, Suit trumpSuit) {

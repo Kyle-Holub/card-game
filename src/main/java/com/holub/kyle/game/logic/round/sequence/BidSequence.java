@@ -10,11 +10,29 @@ import java.util.Map;
 @AllArgsConstructor
 public class BidSequence {
 
-    PlayerQueue players;
+    private PlayerQueue players;
+    private int numCards;
 
     public Map<Player, Integer> takeBids() {
         Map<Player, Integer> bidMap = new HashMap<>();
-        players.getPlayerQ().forEach(player -> bidMap.put(player, player.getBid()));
+        int totalBid = 0;
+        for (int i = 0; i < players.numPlayers() - 1; i++) {
+            int bid = players.getCurrentPlayer().getBid();
+            bidMap.put(players.getCurrentPlayer(), bid);
+            totalBid += bid;
+            players.nextPlayer();
+        }
+
+        int bid;
+        if (totalBid <= numCards) {
+            int cannotBid = numCards - totalBid;
+            bid = players.getCurrentPlayer().getBidWithCatch(cannotBid);
+        } else {
+            bid = players.getCurrentPlayer().getBid();
+        }
+        bidMap.put(players.getCurrentPlayer(), bid);
+        players.nextPlayer();
+
         return bidMap;
     }
 }
