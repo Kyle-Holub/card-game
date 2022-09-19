@@ -35,7 +35,7 @@ public class Round {
         DealSequence dealSequence = new DealSequence(numTricks);
         Card trumpCard = dealSequence.dealCards(players);
 
-        BidSequence bidSequence = new BidSequence(players);
+        BidSequence bidSequence = new BidSequence(players, numTricks);
         bidMap = bidSequence.takeBids();
 
         PlaySequence playSequence = new PlaySequence();

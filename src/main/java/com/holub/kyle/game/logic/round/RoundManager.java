@@ -15,11 +15,7 @@ public class RoundManager {
 
     private static final int NUM_PLAYERS = 4;
 
-    private final PlayerQueue players;
-
-    public RoundManager() {
-        players = new PlayerQueue(IntStream.range(0, NUM_PLAYERS).mapToObj(i -> new NpcPlayer()).collect(Collectors.toList()));
-    }
+    private PlayerQueue players;
 
     public void manageRounds(int numGames) {
         int highestScore = 0;
@@ -35,6 +31,7 @@ public class RoundManager {
     }
 
     public int playRounds() {
+        players = new PlayerQueue(IntStream.range(0, NUM_PLAYERS).mapToObj(i -> new NpcPlayer()).collect(Collectors.toList()));
         log.info("Starting...");
 
         for (int numCards = 8; numCards > 0; numCards--) {
