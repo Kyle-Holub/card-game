@@ -1,5 +1,6 @@
 package com.holub.kyle.game.graphics.handlers;
 
+import lombok.extern.slf4j.Slf4j;
 import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
@@ -14,6 +15,7 @@ import static org.lwjgl.glfw.GLFW.GLFW_OPENGL_FORWARD_COMPAT;
 import static org.lwjgl.glfw.GLFW.GLFW_OPENGL_PROFILE;
 import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
 import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
+import static org.lwjgl.glfw.GLFW.GLFW_RESIZABLE;
 import static org.lwjgl.glfw.GLFW.GLFW_SAMPLES;
 import static org.lwjgl.glfw.GLFW.GLFW_VISIBLE;
 import static org.lwjgl.glfw.GLFW.glfwCreateWindow;
@@ -50,33 +52,24 @@ import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL11.glPolygonMode;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
+@Slf4j
 public class Window {
 
-    /**
-     * Field of View in Radians
-     */
+    // Field of View in Radians
     public static final float FOV = (float) Math.toRadians(60.0f);
 
-    /**
-     * Distance to the near plane
-     */
+    // Distance to the near plane
     public static final float Z_NEAR = 0.01f;
 
-    /**
-     * Distance to the far plane
-     */
+    // Distance to the far plane
     public static final float Z_FAR = 1000.f;
 
     private final String title;
 
     private int width;
-
     private int height;
-
     private long windowHandle;
-
     private boolean resized;
-
     private boolean vSync;
 
     private final WindowOptions opts;
@@ -91,86 +84,102 @@ public class Window {
     }
 
     public void init() {
-        // Setup an error callback. The default implementation will print the error message in System.err.
-        GLFWErrorCallback.createPrint(System.err).set();
+        try (GLFWErrorCallback error = GLFWErrorCallback.createPrint()) {
+            error.set();
 
-        // Initialize GLFW. Most GLFW functions will not work before doing this.
-        if (!glfwInit()) {
-            throw new IllegalStateException("Unable to initialize GLFW");
+            initGLFW();
+            setWindowHints();
+            createWindow();
+            setupResizeWindowCallback();
+            setupKeyboardCallback();
+            glfwMakeContextCurrent(windowHandle);
+            enableVsync();
+            glfwShowWindow(windowHandle);
+            GL.createCapabilities();
+
+            glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+            glEnable(GL_DEPTH_TEST);
+            glEnable(GL_STENCIL_TEST);
+            enableRemainingWindowOpts();
+        }
+    }
+
+    private void enableRemainingWindowOpts() {
+        if (opts.isShowTriangles()) {
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         }
 
-        glfwDefaultWindowHints(); // optional, the current window hints are already the default
-        glfwWindowHint(GLFW_VISIBLE, GL_FALSE); // the window will stay hidden after creation
-//        glfwWindowHint(GLFW_RESIZABLE, GL_TRUE); // the window will be resizable
+        if (opts.isCullFace()) {
+            glEnable(GL_CULL_FACE);
+            glCullFace(GL_BACK);
+        }
+
+        if (opts.isAntialiasing()) {
+            glfwWindowHint(GLFW_SAMPLES, 4);
+        }
+    }
+
+    private void setWindowHints() {
+        glfwDefaultWindowHints();
+        glfwWindowHint(GLFW_VISIBLE, GL_FALSE); // the window will stay hidden until ready
+        glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-        if (opts.compatibleProfile) {
+        if (opts.isCompatibleProfile()) {
             glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
         } else {
             glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
             glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
         }
+    }
 
-        // Create the window
-        long primaryMonitor = glfwGetPrimaryMonitor();
-        GLFWVidMode vidMode = glfwGetVideoMode(primaryMonitor);
-        width = vidMode.width();
-        height = vidMode.height();
-        windowHandle = glfwCreateWindow(vidMode.width(), vidMode.height(), title, glfwGetPrimaryMonitor(), NULL);
-        if (windowHandle == NULL) {
-            throw new RuntimeException("Failed to create the GLFW window");
+    private static void initGLFW() {
+        if (!glfwInit()) { // Initialize GLFW - GLFW functions will not work before doing this.
+            throw new IllegalStateException("Unable to initialize GLFW");
         }
+    }
 
-        glfwSetFramebufferSizeCallback(windowHandle, (window, width, height) -> {
-            this.width = width;
-            this.height = height;
-            this.setResized(true);
-        });
+    private void enableVsync() {
+        if (isvSync()) {
+            glfwSwapInterval(1);
+        }
+    }
 
-        // Setup a key callback. It will be called every time a key is pressed, repeated or released.
+    private void setupKeyboardCallback() {
         glfwSetKeyCallback(windowHandle, (window, key, scanCode, action, mods) -> {
             if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE) {
                 glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop
             }
         });
+    }
 
-        // Make the OpenGL context current
-        glfwMakeContextCurrent(windowHandle);
+    private void setupResizeWindowCallback() {
+        glfwSetFramebufferSizeCallback(windowHandle, (window, windowWidth, windowHeight) -> resizeWindow(windowWidth, windowHeight));
+    }
 
-        if (isvSync()) {
-            // Enable v-sync
-            glfwSwapInterval(1);
-        }
+    private void resizeWindow(int windowWidth, int windowHeight) {
+        this.width = windowWidth;
+        this.height = windowHeight;
+        this.setResized(true);
+    }
 
-        // Make the window visible
-        glfwShowWindow(windowHandle);
-
-        GL.createCapabilities();
-
-        // Set the clear color
-        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-        glEnable(GL_DEPTH_TEST);
-        glEnable(GL_STENCIL_TEST);
-        if (opts.showTriangles) {
-            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-        }
-
-        if (opts.cullFace) {
-            glEnable(GL_CULL_FACE);
-            glCullFace(GL_BACK);
-        }
-
-        // Antialiasing
-        if (opts.antialiasing) {
-            glfwWindowHint(GLFW_SAMPLES, 4);
+    private void createWindow() {
+        long primaryMonitor = glfwGetPrimaryMonitor();
+        GLFWVidMode vidMode = glfwGetVideoMode(primaryMonitor);
+        assert vidMode != null;
+        width = vidMode.width();
+        height = vidMode.height();
+        windowHandle = glfwCreateWindow(width, height, title, glfwGetPrimaryMonitor(), NULL);
+        if (windowHandle == NULL) {
+            throw new IllegalStateException("Failed to create the GLFW window");
         }
     }
-    
+
     public void restoreState() {
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_STENCIL_TEST);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        if (opts.cullFace) {
+        if (opts.isCullFace()) {
             glEnable(GL_CULL_FACE);
             glCullFace(GL_BACK);
         }
@@ -253,20 +262,5 @@ public class Window {
 
     public WindowOptions getOptions() {
         return opts;
-    }
-    
-    public static class WindowOptions {
-
-        public boolean cullFace;
-
-        public boolean showTriangles;
-
-        public boolean showFps;
-
-        public boolean compatibleProfile;
-
-        public boolean antialiasing;
-
-        public boolean frustumCulling;        
     }
 }
