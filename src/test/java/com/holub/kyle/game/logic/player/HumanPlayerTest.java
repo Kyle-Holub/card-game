@@ -1,7 +1,5 @@
-package com.holub.kyle.game.player;
+package com.holub.kyle.game.logic.player;
 
-import com.holub.kyle.game.logic.player.HumanPlayer;
-import com.holub.kyle.game.logic.player.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,11 +13,8 @@ class HumanPlayerTest extends AbstractPlayerTest {
 
     HumanPlayer player;
 
-    Scanner mockScanner;
-
     @BeforeEach
     void setup() {
-//        mockScanner = Mockito.mock(Scanner.class);
         player = new HumanPlayer(new Scanner(System.in));
     }
 

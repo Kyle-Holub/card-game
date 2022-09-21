@@ -1,6 +1,5 @@
-package com.holub.kyle.game.deck;
+package com.holub.kyle.game.logic.deck;
 
-import com.holub.kyle.game.logic.deck.Card;
 import com.holub.kyle.game.logic.deck.enums.Rank;
 import com.holub.kyle.game.logic.deck.enums.Suit;
 import org.junit.jupiter.api.Test;
