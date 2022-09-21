@@ -2,6 +2,7 @@ package com.holub.kyle.game.player;
 
 import com.holub.kyle.game.deck.Card;
 import com.holub.kyle.game.deck.enums.Suit;
+import com.holub.kyle.game.neural.observation.Observation;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,6 +22,7 @@ public class NpcPlayer extends Player {
         super();
         this.setName(genRandomName());
 
+        // init network
 //        List<Neuron> neurons = IntStream.range(0, 110).mapToObj(i -> new Neuron()).collect(Collectors.toList());
 //        NeuralNetLayer inputLayer = new NeuralNetLayer("input", neurons);
 //
@@ -33,8 +35,19 @@ public class NpcPlayer extends Player {
 //        net = new NeuralNet("id", inputLayer, List.of(hiddenLayer), outputLayer);
     }
 
+    public Observation observeGameState() {
+        return new Observation();
+    }
+
     @Override
     public int getBid() {
+        /**
+         *   TODO
+         *   observe gamestate
+         *   send Observation to NN
+         *   RL magic
+         *   make bid with highest action value
+         */
         int bound = getHand().size() / 2;
         int bid = 0;
         if (bound > 0) {
@@ -46,6 +59,13 @@ public class NpcPlayer extends Player {
 
     @Override
     public Card playCardEnforced(List<Card> playableCards, Suit leadSuit, Suit trumpSuit) {
+        /*
+        * TODO
+        * same as bid, observe gamestate
+        * send Observation to NN
+        * RL magic
+        * play card with highest action value out of valid cards
+         */
         int numPlayableCards = playableCards.size();
         if (numPlayableCards > 0) {
             Card cardToPlay = playableCards.get(RANDOM.nextInt(numPlayableCards));

@@ -18,14 +18,14 @@ public class Observation {
     private int isDealer;
     // is lead player (0,1)
     private int isLeadPlayer;
-    // lead suit (0-4 where 4 not set)
+    // lead suit (0-4 where 4 no lead suit)
     private int leadSuit;
 
     // agent cards in hand (52 cards)
-    private int[] cardsPlayed;
+    private double[] cardsPlayed;
 
     /* OPPONENT INFO */
 
-    // all opponent played cards (52 cards)
-    private int[] opponentPlayedCards;
+    // all opponent played cards for a hand (52 cards)
+    private double[] opponentPlayedCards;
 }
