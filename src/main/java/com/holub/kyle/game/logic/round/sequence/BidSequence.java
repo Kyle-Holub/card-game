@@ -1,7 +1,7 @@
 package com.holub.kyle.game.logic.round.sequence;
 
-import com.holub.kyle.game.player.Player;
-import com.holub.kyle.game.player.PlayerQueue;
+import com.holub.kyle.game.logic.player.Player;
+import com.holub.kyle.game.logic.player.PlayerQueue;
 import lombok.AllArgsConstructor;
 
 import java.util.HashMap;

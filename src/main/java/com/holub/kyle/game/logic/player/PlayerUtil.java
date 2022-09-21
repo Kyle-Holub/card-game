@@ -1,4 +1,4 @@
-package com.holub.kyle.game.player;
+package com.holub.kyle.game.logic.player;
 
 import java.util.List;
 import java.util.stream.IntStream;

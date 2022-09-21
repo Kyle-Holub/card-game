@@ -1,13 +1,8 @@
-package com.holub.kyle.game.state;
+package com.holub.kyle.game.engine.state;
 
 import java.awt.*;
 
-public class WelcomeState extends GameState {
-
-    public WelcomeState(GameStateManager gsm) {
-        this.gsm = gsm;
-    }
-
+public class PlayState extends GameState {
     @Override
     public void init() {
         // TODO

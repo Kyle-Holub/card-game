@@ -1,5 +1,7 @@
 package com.holub.kyle.game.player;
 
+import com.holub.kyle.game.logic.player.HumanPlayer;
+import com.holub.kyle.game.logic.player.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

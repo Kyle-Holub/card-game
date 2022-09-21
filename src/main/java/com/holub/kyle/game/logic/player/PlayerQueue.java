@@ -1,4 +1,4 @@
-package com.holub.kyle.game.player;
+package com.holub.kyle.game.logic.player;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;

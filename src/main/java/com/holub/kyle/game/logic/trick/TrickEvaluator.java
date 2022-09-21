@@ -1,8 +1,8 @@
 package com.holub.kyle.game.logic.trick;
 
-import com.holub.kyle.game.deck.Card;
-import com.holub.kyle.game.deck.enums.Suit;
-import com.holub.kyle.game.player.Player;
+import com.holub.kyle.game.logic.deck.Card;
+import com.holub.kyle.game.logic.deck.enums.Suit;
+import com.holub.kyle.game.logic.player.Player;
 
 import java.util.ArrayList;
 import java.util.List;

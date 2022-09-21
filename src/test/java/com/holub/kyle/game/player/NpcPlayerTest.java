@@ -1,8 +1,9 @@
 package com.holub.kyle.game.player;
 
-import com.holub.kyle.game.deck.Card;
-import com.holub.kyle.game.deck.enums.Rank;
-import com.holub.kyle.game.deck.enums.Suit;
+import com.holub.kyle.game.logic.deck.Card;
+import com.holub.kyle.game.logic.deck.enums.Rank;
+import com.holub.kyle.game.logic.deck.enums.Suit;
+import com.holub.kyle.game.logic.player.NpcPlayer;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 

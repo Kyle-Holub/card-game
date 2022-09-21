@@ -1,7 +1,7 @@
 package com.holub.kyle.game.logic.round.sequence;
 
-import com.holub.kyle.game.player.Player;
-import com.holub.kyle.game.player.PlayerQueue;
+import com.holub.kyle.game.logic.player.Player;
+import com.holub.kyle.game.logic.player.PlayerQueue;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;

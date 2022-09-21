@@ -1,8 +1,8 @@
 package com.holub.kyle.game.logic.round;
 
-import com.holub.kyle.game.player.NpcPlayer;
-import com.holub.kyle.game.player.Player;
-import com.holub.kyle.game.player.PlayerQueue;
+import com.holub.kyle.game.logic.player.NpcPlayer;
+import com.holub.kyle.game.logic.player.Player;
+import com.holub.kyle.game.logic.player.PlayerQueue;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Comparator;

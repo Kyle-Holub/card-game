@@ -1,4 +1,4 @@
-package com.holub.kyle.game.state;
+package com.holub.kyle.game.engine.state;
 
 import java.awt.*;
 import java.util.Map;
