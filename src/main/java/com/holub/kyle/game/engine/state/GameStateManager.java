@@ -1,6 +1,7 @@
 package com.holub.kyle.game.engine.state;
 
-import java.awt.*;
+import com.holub.kyle.game.graphics.handlers.Window;
+
 import java.util.Map;
 
 public class GameStateManager {
@@ -22,8 +23,8 @@ public class GameStateManager {
         gameStates.get(currentState).update();
     }
 
-    public void draw(Graphics g) {
-        gameStates.get(currentState).draw(g);
+    public void render(Window w) {
+        gameStates.get(currentState).render(w);
     }
 
     public void processInput() {

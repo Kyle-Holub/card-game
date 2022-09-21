@@ -1,6 +1,6 @@
 package com.holub.kyle.game.engine.state;
 
-import java.awt.*;
+import com.holub.kyle.game.graphics.handlers.Window;
 
 public class WelcomeState extends GameState {
 
@@ -19,7 +19,7 @@ public class WelcomeState extends GameState {
     }
 
     @Override
-    public void draw(Graphics g) {
+    public void render(Window g) {
         // TODO
     }
 

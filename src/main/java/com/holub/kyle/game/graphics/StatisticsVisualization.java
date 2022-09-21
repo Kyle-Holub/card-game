@@ -1,7 +1,9 @@
 package com.holub.kyle.game.graphics;
 
-import com.holub.kyle.game.graphics.handlers.Window;
+import com.holub.kyle.game.engine.GameEngine;
+import com.holub.kyle.game.engine.state.GameState;
 import com.holub.kyle.game.graphics.handlers.WindowOptions;
+import com.holub.kyle.game.graphics.renderer.StatsManagerState;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -18,8 +20,9 @@ public class StatisticsVisualization {
                     .antialiasing(true)
                     .frustumCulling(false)
                     .build();
-            Window window = new Window("Graphics Test", vSync, opts);
-            window.init();
+            GameState statsState = new StatsManagerState();
+            GameEngine gameEng = new GameEngine("GAME", vSync, opts, statsState);
+            gameEng.run();
         } catch (Exception ex) {
             log.error("ERROR INITIALIZING OPEN-GL CONTEXT");
             ex.printStackTrace();

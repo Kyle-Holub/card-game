@@ -1,25 +1,29 @@
-package com.holub.kyle.game.engine.state;
+package com.holub.kyle.game.graphics.renderer;
 
+import com.holub.kyle.game.engine.state.GameState;
 import com.holub.kyle.game.graphics.handlers.Window;
 
-public class PlayState extends GameState {
+public class StatsManagerState extends GameState {
+
+    StatisticsRenderer renderer;
+
     @Override
     public void init() {
-        // TODO
+        renderer = new StatisticsRenderer();
     }
 
     @Override
     public void update() {
-        // TODO
+
     }
 
     @Override
     public void render(Window w) {
-        // TODO
+
     }
 
     @Override
     public void processInput() {
-        // TODO
+
     }
 }

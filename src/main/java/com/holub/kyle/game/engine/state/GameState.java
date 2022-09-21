@@ -1,12 +1,12 @@
 package com.holub.kyle.game.engine.state;
 
-import java.awt.*;
+import com.holub.kyle.game.graphics.handlers.Window;
 
 public abstract class GameState {
     protected GameStateManager gsm;
 
     public abstract void init();
     public abstract void update();
-    public abstract void draw(Graphics g);
+    public abstract void render(Window w);
     public abstract void processInput();
 }
