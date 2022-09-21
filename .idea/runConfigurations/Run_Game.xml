@@ -1,10 +1,10 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Run Game" type="Application" factoryName="Application">
-    <option name="MAIN_CLASS_NAME" value="com.holub.kyle.Main" />
+    <option name="MAIN_CLASS_NAME" value="com.holub.kyle.game.Main" />
     <module name="card-game" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="com.holub.kyle.*" />
+        <option name="PATTERN" value="com.holub.kyle.game.engine.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>

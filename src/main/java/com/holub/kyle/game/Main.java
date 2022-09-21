@@ -1,4 +1,4 @@
-package com.holub.kyle;
+package com.holub.kyle.game;
 
 import com.holub.kyle.game.logic.round.RoundManager;
 
