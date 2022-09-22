@@ -1,8 +1,8 @@
 package com.holub.kyle.assertions;
 
-import com.holub.kyle.game.deck.Card;
-import com.holub.kyle.game.deck.enums.Rank;
-import com.holub.kyle.game.deck.enums.Suit;
+import com.holub.kyle.game.logic.deck.Card;
+import com.holub.kyle.game.logic.deck.enums.Rank;
+import com.holub.kyle.game.logic.deck.enums.Suit;
 import org.assertj.core.api.AbstractAssert;
 
 public class CardAssert extends AbstractAssert<CardAssert, Card> {

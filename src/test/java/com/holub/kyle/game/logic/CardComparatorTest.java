@@ -1,8 +1,8 @@
 package com.holub.kyle.game.logic;
 
-import com.holub.kyle.game.deck.Card;
-import com.holub.kyle.game.deck.enums.Rank;
-import com.holub.kyle.game.deck.enums.Suit;
+import com.holub.kyle.game.logic.deck.Card;
+import com.holub.kyle.game.logic.deck.enums.Rank;
+import com.holub.kyle.game.logic.deck.enums.Suit;
 import com.holub.kyle.game.logic.trick.CardComparator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;

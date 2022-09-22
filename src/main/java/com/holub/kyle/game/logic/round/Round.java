@@ -1,12 +1,12 @@
 package com.holub.kyle.game.logic.round;
 
-import com.holub.kyle.game.deck.Card;
+import com.holub.kyle.game.logic.deck.Card;
+import com.holub.kyle.game.logic.player.Player;
+import com.holub.kyle.game.logic.player.PlayerQueue;
 import com.holub.kyle.game.logic.round.sequence.BidSequence;
 import com.holub.kyle.game.logic.round.sequence.DealSequence;
 import com.holub.kyle.game.logic.round.sequence.PlaySequence;
 import com.holub.kyle.game.logic.round.sequence.ScoreSequence;
-import com.holub.kyle.game.player.Player;
-import com.holub.kyle.game.player.PlayerQueue;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 

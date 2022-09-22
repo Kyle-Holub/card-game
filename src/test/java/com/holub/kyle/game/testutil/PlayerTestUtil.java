@@ -1,7 +1,7 @@
 package com.holub.kyle.game.testutil;
 
-import com.holub.kyle.game.player.NpcPlayer;
-import com.holub.kyle.game.player.PlayerQueue;
+import com.holub.kyle.game.logic.player.NpcPlayer;
+import com.holub.kyle.game.logic.player.PlayerQueue;
 
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;

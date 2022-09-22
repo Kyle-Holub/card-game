@@ -1,9 +1,9 @@
 package com.holub.kyle.game.logic.round.sequence;
 
-import com.holub.kyle.game.deck.Deck;
-import com.holub.kyle.game.deck.enums.Suit;
-import com.holub.kyle.game.player.Player;
-import com.holub.kyle.game.player.PlayerQueue;
+import com.holub.kyle.game.logic.deck.Deck;
+import com.holub.kyle.game.logic.deck.enums.Suit;
+import com.holub.kyle.game.logic.player.Player;
+import com.holub.kyle.game.logic.player.PlayerQueue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
