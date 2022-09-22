@@ -42,7 +42,6 @@ import static org.lwjgl.opengl.GL11.GL_FALSE;
 import static org.lwjgl.opengl.GL11.GL_FRONT_AND_BACK;
 import static org.lwjgl.opengl.GL11.GL_LINE;
 import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
-import static org.lwjgl.opengl.GL11.GL_PROJECTION;
 import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
 import static org.lwjgl.opengl.GL11.GL_STENCIL_TEST;
 import static org.lwjgl.opengl.GL11.GL_TRUE;
@@ -50,11 +49,8 @@ import static org.lwjgl.opengl.GL11.glBlendFunc;
 import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.opengl.GL11.glCullFace;
 import static org.lwjgl.opengl.GL11.glEnable;
-import static org.lwjgl.opengl.GL11.glLoadIdentity;
-import static org.lwjgl.opengl.GL11.glMatrixMode;
 import static org.lwjgl.opengl.GL11.glOrtho;
 import static org.lwjgl.opengl.GL11.glPolygonMode;
-import static org.lwjgl.opengl.GL11C.glViewport;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 @Slf4j
@@ -106,9 +102,9 @@ public class Window {
             glEnable(GL_DEPTH_TEST);
             glEnable(GL_STENCIL_TEST);
 
-            glViewport( 0, 0, 400, 400 );
-            glMatrixMode( GL_PROJECTION );
-            glLoadIdentity();
+//            glViewport( 0, 0, 400, 400 );
+//            glMatrixMode( GL_PROJECTION );
+//            glLoadIdentity();
 
             // see https://www.opengl.org/sdk/docs/man2/xhtml/glOrtho.xml
             glOrtho(0.0,400.0,0.0,400.0,0.0,1.0); // this creates a canvas you can do 2D drawing on

@@ -45,7 +45,7 @@ public class GameEngine implements Runnable {
         window.init();
         timer.init();
 //        mouseInput.init(window);
-        gameLogic.init();
+        gameLogic.init(window);
         lastFps = timer.getTime();
         fps = 0;
     }
