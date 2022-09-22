@@ -3,6 +3,7 @@ package com.holub.kyle.game.logic.round;
 import com.holub.kyle.game.logic.player.NpcPlayer;
 import com.holub.kyle.game.logic.player.Player;
 import com.holub.kyle.game.logic.player.PlayerQueue;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Comparator;
@@ -17,9 +18,12 @@ public class RoundManager {
 
     private PlayerQueue players;
 
-    public void manageRounds(int numGames) {
-        int highestScore = 0;
+    @Getter
+    private boolean isRoundOver = false;
+    @Getter
+    private int highestScore;
 
+    public void manageRounds(int numGames) {
         for (int i = 0; i < numGames; i++) {
             int score = playRounds();
             if (score > highestScore) {
@@ -28,6 +32,7 @@ public class RoundManager {
         }
 
         log.info("HIGHEST SCORE:" + highestScore);
+        isRoundOver = true;
     }
 
     public int playRounds() {
