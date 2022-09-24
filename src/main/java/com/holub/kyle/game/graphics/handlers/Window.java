@@ -185,6 +185,8 @@ public class Window {
     }
 
     public void restoreState() {
+//        glOrtho(0.0,400.0,0.0,400.0,0.0,1.0); // this creates a canvas you can do 2D drawing on
+
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_STENCIL_TEST);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.lwjgl.nanovg.NVGColor;
 import org.lwjgl.system.MemoryUtil;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.DoubleBuffer;
 import java.text.DateFormat;
@@ -33,85 +34,80 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 @Slf4j
 public class TextRenderer {
+
     private static final String FONT_NAME = "BOLD";
+    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm:ss");
 
-    private long vg;
+    private long nvgContext;
+    private NVGColor colorAlloc;
+    private DoubleBuffer posX;
+    private DoubleBuffer posY;
 
-    private NVGColor colour;
-
-    private ByteBuffer fontBuffer;
-
-    private final DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-
-    private DoubleBuffer posx;
-
-    private DoubleBuffer posy;
-
-    private int counter;
-
-    public void init(Window window) throws Exception {
-        this.vg = window.getOptions().isAntialiasing() ? nvgCreate(NVG_ANTIALIAS | NVG_STENCIL_STROKES) : nvgCreate(NVG_STENCIL_STROKES);
-        if (this.vg == NULL) {
-            throw new Exception("Could not init nanovg");
+    public void init(Window window) throws IOException {
+        this.nvgContext = window.getOptions().isAntialiasing() ? nvgCreate(NVG_ANTIALIAS | NVG_STENCIL_STROKES) : nvgCreate(NVG_STENCIL_STROKES);
+        if (this.nvgContext == NULL) {
+            throw new IllegalStateException("Could not init NanoVG");
         }
 
-        fontBuffer = ResourceUtils.ioResourceToByteBuffer("/fonts/OpenSans-Bold.ttf", 150 * 1024);
-        int font = nvgCreateFontMem(vg, FONT_NAME, fontBuffer, 0);
+        ByteBuffer fontBuffer = ResourceUtils.ioResourceToByteBuffer("/fonts/OpenSans-Bold.ttf", 150 * 1024);
+        int font = nvgCreateFontMem(nvgContext, FONT_NAME, fontBuffer, 0);
         if (font == -1) {
-            throw new Exception("Could not add font");
+            throw new IllegalStateException("Could not add font");
         }
-        colour = NVGColor.create();
+        colorAlloc = NVGColor.create();
 
-        posx = MemoryUtil.memAllocDouble(1);
-        posy = MemoryUtil.memAllocDouble(1);
-
-        counter = 0;
+        posX = MemoryUtil.memAllocDouble(1);
+        posY = MemoryUtil.memAllocDouble(1);
     }
 
-    public void render(Window window) {
-        nvgBeginFrame(vg, window.getWidth(), window.getHeight(), 1);
+    public void renderTimestamp(Window window) {
+        nvgBeginFrame(nvgContext, window.getWidth(), window.getHeight(), 1);
 
-        nvgBeginPath(vg);
-        nvgRect(vg, 100, window.getHeight() - 200, window.getWidth() - 200, 100);
-        nvgFillColor(vg, rgba(0x23, 0xd1, 0xf1, 200, colour));
-        nvgFill(vg);
+        nvgBeginPath(nvgContext);
+        nvgRect(nvgContext, 100, window.getHeight() - 200, window.getWidth() - 200, 100);
+        nvgFillColor(nvgContext, setColor(0x23, 0xd1, 0xf1, 200, colorAlloc));
+        nvgFill(nvgContext);
 
         // Render hour text
-        nvgFontSize(vg, 60.0f);
-        nvgFontFace(vg, FONT_NAME);
-        nvgTextAlign(vg, NVG_ALIGN_LEFT | NVG_ALIGN_TOP);
-        nvgFillColor(vg, rgba(0xe6, 0xea, 0xed, 255, colour));
-        nvgText(vg, (window.getWidth() / 2) - 100, window.getHeight() - 175, dateFormat.format(new Date()));
+        nvgFontSize(nvgContext, 60.0f);
+        nvgFontFace(nvgContext, FONT_NAME);
+        nvgTextAlign(nvgContext, NVG_ALIGN_LEFT | NVG_ALIGN_TOP);
+        nvgFillColor(nvgContext, setColor(0xe6, 0xea, 0xed, 255, colorAlloc));
+        nvgText(nvgContext, (window.getWidth() / 2) - 100, window.getHeight() - 175, DATE_FORMAT.format(new Date()));
 
-        nvgEndFrame(vg);
+        nvgEndFrame(nvgContext);
 
-        // Restore state
         window.restoreState();
     }
 
-    public void incCounter() {
-        counter++;
-        if (counter > 99) {
-            counter = 0;
-        }
+    public void renderText(Window window, String text, float posX, float posY) {
+        nvgBeginFrame(nvgContext, window.getWidth(), window.getHeight(), 1);
+
+        nvgFontSize(nvgContext, 60.0f);
+        nvgFontFace(nvgContext, FONT_NAME);
+        nvgTextAlign(nvgContext, NVG_ALIGN_LEFT | NVG_ALIGN_TOP);
+        nvgFillColor(nvgContext, setColor(0xe6, 0xea, 0xed, 255, colorAlloc));
+        nvgText(nvgContext, posX, posY, text);
+
+        nvgEndFrame(nvgContext);
+        window.restoreState();
     }
 
-    private NVGColor rgba(int r, int g, int b, int a, NVGColor colour) {
+    private NVGColor setColor(int r, int g, int b, int a, NVGColor colour) {
         colour.r(r / 255.0f);
         colour.g(g / 255.0f);
         colour.b(b / 255.0f);
         colour.a(a / 255.0f);
-
         return colour;
     }
 
     public void cleanup() {
-        nvgDelete(vg);
-        if (posx != null) {
-            MemoryUtil.memFree(posx);
+        nvgDelete(nvgContext);
+        if (posX != null) {
+            MemoryUtil.memFree(posX);
         }
-        if (posy != null) {
-            MemoryUtil.memFree(posy);
+        if (posY != null) {
+            MemoryUtil.memFree(posY);
         }
     }
 }

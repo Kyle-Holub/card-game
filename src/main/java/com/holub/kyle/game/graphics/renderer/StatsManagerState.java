@@ -10,13 +10,14 @@ public class StatsManagerState extends GameState {
 
     private int highestScore;
     private final int numGames = 1000;
-    private int gamesRun = 0;
+    private final int gamesRun = 0;
     private RoundManager game;
     private TextRenderer text;
 
     @Override
     public void init(Window w) {
         game = new RoundManager();
+        game.manageRounds(1);
         text = new TextRenderer();
         try {
             text.init(w);
@@ -27,19 +28,24 @@ public class StatsManagerState extends GameState {
 
     @Override
     public void update() {
-        if (game.isRoundOver()) {
-            highestScore = game.getHighestScore();
-            gamesRun++;
-            if (gamesRun < numGames) {
-                game = new RoundManager();
-                game.manageRounds(1);
-            }
-        }
+//        if (game.isRoundOver()) {
+//            highestScore = game.getHighestScore();
+////            game.manageRounds(1);
+//            gamesRun++;
+//            if (gamesRun < numGames) {
+//                game = new RoundManager();
+//                game.manageRounds(1);
+//            } else {
+//                System.exit(0);
+//            }
+//        }
     }
 
     @Override
     public void render(Window w) {
-        text.render(w);
+        text.renderTimestamp(w);
+        text.renderText(w, "Highest score: " + highestScore, 500f, 500f);
+        text.renderText(w, "Num games: " + gamesRun, 500f, 600f);
     }
 
     @Override
