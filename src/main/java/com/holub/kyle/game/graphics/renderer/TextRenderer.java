@@ -77,7 +77,7 @@ public class TextRenderer {
 
         nvgEndFrame(nvgContext);
 
-        window.restoreState();
+//        window.restoreState();
     }
 
     public void renderText(Window window, String text, float posX, float posY) {
@@ -90,7 +90,7 @@ public class TextRenderer {
         nvgText(nvgContext, posX, posY, text);
 
         nvgEndFrame(nvgContext);
-        window.restoreState();
+//        window.restoreState();
     }
 
     private NVGColor setColor(int r, int g, int b, int a, NVGColor colour) {

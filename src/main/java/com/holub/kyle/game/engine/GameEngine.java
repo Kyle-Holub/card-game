@@ -7,7 +7,7 @@ import com.holub.kyle.game.util.Timer;
 
 public class GameEngine implements Runnable {
     public static final int TARGET_FPS = 75;
-    public static final int TARGET_UPS = 30;
+    public static final int TARGET_UPS = 2000;
     private final Window window;
     private final Timer timer;
     private final GameState gameLogic;

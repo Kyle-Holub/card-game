@@ -1,4 +1,4 @@
-package com.holub.kyle.game.logic.round.sequence;
+package com.holub.kyle.game.logic.hand.sequence;
 
 import com.holub.kyle.game.logic.player.NpcPlayer;
 import com.holub.kyle.game.logic.player.Player;
@@ -34,7 +34,7 @@ class ScoreSequenceTest {
             Map<Player, Integer> tricks = Map.of(players.get(0), 0, players.get(1), 0);
             PlayerQueue playerQueue = new PlayerQueue(players);
 
-            scoreSequence.tallyScores(playerQueue, bids, tricks);
+            scoreSequence.updateScores(playerQueue, bids, tricks);
 
             assertThat(players).extracting(Player::getScore).containsExactly(10, 10);
         }
@@ -46,7 +46,7 @@ class ScoreSequenceTest {
             Map<Player, Integer> tricks = Map.of(players.get(0), 1, players.get(1), 0);
             PlayerQueue playerQueue = new PlayerQueue(players);
 
-            scoreSequence.tallyScores(playerQueue, bids, tricks);
+            scoreSequence.updateScores(playerQueue, bids, tricks);
 
             assertThat(players.get(0).getScore()).isEqualTo(12);
             assertThat(players.get(1).getScore()).isEqualTo(-5);
@@ -64,7 +64,7 @@ class ScoreSequenceTest {
             Map<Player, Integer> tricks = Map.of(players.get(0), numTricks, players.get(1), numTricks);
             PlayerQueue playerQueue = new PlayerQueue(players);
 
-            scoreSequence.tallyScores(playerQueue, bids, tricks);
+            scoreSequence.updateScores(playerQueue, bids, tricks);
 
             assertThat(players.get(0).getScore()).isEqualTo(10 + numTricks * 2);
         }
@@ -77,7 +77,7 @@ class ScoreSequenceTest {
             Map<Player, Integer> tricks = Map.of(players.get(0), numTricks, players.get(1), numTricks);
             PlayerQueue playerQueue = new PlayerQueue(players);
 
-            scoreSequence.tallyScores(playerQueue, bids, tricks);
+            scoreSequence.updateScores(playerQueue, bids, tricks);
 
             assertThat(players.get(0).getScore()).isEqualTo(-5 * (bid - numTricks));
         }
@@ -90,7 +90,7 @@ class ScoreSequenceTest {
             Map<Player, Integer> tricks = Map.of(players.get(0), numTricks, players.get(1), numTricks);
             PlayerQueue playerQueue = new PlayerQueue(players);
 
-            scoreSequence.tallyScores(playerQueue, bids, tricks);
+            scoreSequence.updateScores(playerQueue, bids, tricks);
 
             assertThat(players.get(0).getScore()).isEqualTo(-5 * (numTricks - bid));
         }

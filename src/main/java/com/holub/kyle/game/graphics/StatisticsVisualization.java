@@ -8,8 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class StatisticsVisualization {
-
-    // TODO draw stats on a canvas with openGL
     public static void main(String[] args) {
         try {
             boolean vSync = true;

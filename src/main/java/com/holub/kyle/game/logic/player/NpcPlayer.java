@@ -73,7 +73,8 @@ public class NpcPlayer extends Player {
             log.info(String.format("%s played %s", this, cardToPlay));
             return cardToPlay;
         } else {
-            throw new RuntimeException("No cards to play");
+            log.info(this.toString());
+            throw new IllegalStateException("No cards to play");
         }
     }
 
