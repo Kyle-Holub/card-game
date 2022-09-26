@@ -8,20 +8,19 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class StatisticsVisualization {
-
-    // TODO draw stats on a canvas with openGL
     public static void main(String[] args) {
         try {
-            boolean vSync = true;
             WindowOptions opts = WindowOptions.builder()
                     .cullFace(false)
                     .showFps(true)
                     .compatibleProfile(true)
                     .antialiasing(true)
                     .frustumCulling(false)
+                    .isFullScreen(true)
+                    .enableVsync(true)
                     .build();
             GameState statsState = new StatsManagerState();
-            GameEngine gameEng = new GameEngine("GAME", vSync, opts, statsState);
+            GameEngine gameEng = new GameEngine("GAME", opts, statsState);
             gameEng.run();
         } catch (Exception ex) {
             log.error("ERROR INITIALIZING OPEN-GL CONTEXT");

@@ -1,4 +1,4 @@
-package com.holub.kyle.game.logic.round.sequence;
+package com.holub.kyle.game.logic.hand.sequence;
 
 import com.holub.kyle.game.logic.player.Player;
 import com.holub.kyle.game.logic.player.PlayerQueue;
@@ -6,7 +6,7 @@ import com.holub.kyle.game.logic.player.PlayerQueue;
 import java.util.Map;
 
 public class ScoreSequence {
-    public void tallyScores(PlayerQueue players, Map<Player, Integer> bidMap, Map<Player, Integer> trickMap) {
+    public void updateScores(PlayerQueue players, Map<Player, Integer> bidMap, Map<Player, Integer> trickMap) {
         players.getPlayerQ().forEach(player -> tallyScore(bidMap, trickMap, player));
     }
 

@@ -9,7 +9,7 @@ public class WelcomeState extends GameState {
     }
 
     @Override
-    public void init() {
+    public void init(Window w) {
         // TODO
     }
 

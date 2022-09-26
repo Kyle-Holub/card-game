@@ -7,7 +7,7 @@ import com.holub.kyle.game.util.Timer;
 
 public class GameEngine implements Runnable {
     public static final int TARGET_FPS = 75;
-    public static final int TARGET_UPS = 30;
+    public static final int TARGET_UPS = 20000;
     private final Window window;
     private final Timer timer;
     private final GameState gameLogic;
@@ -16,13 +16,13 @@ public class GameEngine implements Runnable {
     private int fps;
     private final String windowTitle;
 
-    public GameEngine(String windowTitle, boolean vSync, WindowOptions opts, GameState gameLogic) {
-        this(windowTitle, 0, 0, vSync, opts, gameLogic);
+    public GameEngine(String windowTitle, WindowOptions opts, GameState gameLogic) {
+        this(windowTitle, 0, 0, opts, gameLogic);
     }
 
-    public GameEngine(String windowTitle, int width, int height, boolean vSync, WindowOptions opts, GameState gameLogic) {
+    public GameEngine(String windowTitle, int width, int height, WindowOptions opts, GameState gameLogic) {
         this.windowTitle = windowTitle;
-        window = new Window(windowTitle, vSync, opts);
+        window = new Window(windowTitle, opts);
 //        mouseInput = new MouseInput();
         this.gameLogic = gameLogic;
         timer = new Timer();
@@ -45,7 +45,7 @@ public class GameEngine implements Runnable {
         window.init();
         timer.init();
 //        mouseInput.init(window);
-        gameLogic.init();
+        gameLogic.init(window);
         lastFps = timer.getTime();
         fps = 0;
     }
