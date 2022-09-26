@@ -14,5 +14,7 @@ public class WindowOptions {
     private boolean compatibleProfile;
     private boolean antialiasing;
     private boolean frustumCulling;
+    private boolean isFullScreen;
+    private boolean enableVsync;
 }
 

@@ -5,8 +5,12 @@ import com.holub.kyle.game.graphics.handlers.Window;
 import com.holub.kyle.game.logic.hand.HandSeriesManager;
 import lombok.extern.slf4j.Slf4j;
 
-import static org.lwjgl.opengl.GL11C.GL_COLOR_BUFFER_BIT;
-import static org.lwjgl.opengl.GL11C.glClear;
+import java.time.LocalDateTime;
+
+import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_STENCIL_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.glClear;
 
 @Slf4j
 public class StatsManagerState extends GameState {
@@ -16,9 +20,11 @@ public class StatsManagerState extends GameState {
     private int gamesRun = 0;
     private HandSeriesManager game;
     private TextRenderer text;
+    private LocalDateTime startTime;
 
     @Override
     public void init(Window w) {
+        startTime = LocalDateTime.now();
         game = new HandSeriesManager();
         game.init();
         text = new TextRenderer();
@@ -51,16 +57,20 @@ public class StatsManagerState extends GameState {
 
     @Override
     public void render(Window w) {
-        glClear( GL_COLOR_BUFFER_BIT);
-        text.renderTimestamp(w);
-        text.renderText(w, "Highest score: " + highestScore, 500f, 500f);
-        text.renderText(w, "Num games: " + gamesRun, 500f, 600f);
-//        glfwSwapBuffers(w.getWindowHandle());
-//        glfwPollEvents();
+        clear();
+
+//        text.render(w);
+        text.renderTimeElapsed(w, startTime);
+        text.renderText(w, "Games Completed: " + gamesRun, 500f, 500f);
+        text.renderText(w, "Highest Score: " + highestScore, 500f, 600f);
     }
 
     @Override
     public void processInput() {
         // not needed
+    }
+
+    public void clear() {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     }
 }
