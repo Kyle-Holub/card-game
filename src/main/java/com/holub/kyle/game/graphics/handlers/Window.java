@@ -1,5 +1,6 @@
 package com.holub.kyle.game.graphics.handlers;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFWErrorCallback;
@@ -53,16 +54,13 @@ import static org.lwjgl.opengl.GL11.glOrtho;
 import static org.lwjgl.opengl.GL11.glPolygonMode;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
+@SuppressWarnings("resource")
 @Slf4j
+@Getter
 public class Window {
 
-    // Field of View in Radians
     public static final float FOV = (float) Math.toRadians(60.0f);
-
-    // Distance to the near plane
     public static final float Z_NEAR = 0.01f;
-
-    // Distance to the far plane
     public static final float Z_FAR = 1000.f;
 
     private final String title;
@@ -105,12 +103,7 @@ public class Window {
             glEnable(GL_DEPTH_TEST);
             glEnable(GL_STENCIL_TEST);
 
-//            glViewport( 0, 0, 400, 400 );
-//            glMatrixMode( GL_PROJECTION );
-//            glLoadIdentity();
-
-            // see https://www.opengl.org/sdk/docs/man2/xhtml/glOrtho.xml
-            glOrtho(0.0,400.0,0.0,400.0,0.0,1.0); // this creates a canvas you can do 2D drawing on
+            glOrtho(0.0,400.0,0.0,400.0,0.0,1.0);
             enableRemainingWindowOpts();
         }
     }
@@ -151,7 +144,7 @@ public class Window {
     }
 
     private void enableVsync() {
-        if (isvSync()) {
+        if (opts.isEnableVsync()) {
             glfwSwapInterval(1);
         }
     }
@@ -166,6 +159,11 @@ public class Window {
 
     private void setupResizeWindowCallback() {
         glfwSetFramebufferSizeCallback(windowHandle, (window, windowWidth, windowHeight) -> resizeWindow(windowWidth, windowHeight));
+    }
+
+    public void update() {
+        glfwSwapBuffers(windowHandle);
+        glfwPollEvents();
     }
 
     private void resizeWindow(int windowWidth, int windowHeight) {
@@ -200,24 +198,8 @@ public class Window {
         }
     }
 
-    public long getWindowHandle() {
-        return windowHandle;
-    }
-
-    public String getWindowTitle() {
-        return title;
-    }
-
     public void setWindowTitle(String title) {
         glfwSetWindowTitle(windowHandle, title);
-    }
-
-    public WindowOptions getWindowOptions() {
-        return opts;
-    }
-
-    public Matrix4f getProjectionMatrix() {
-        return projectionMatrix;
     }
 
     public Matrix4f updateProjectionMatrix() {
@@ -242,36 +224,7 @@ public class Window {
         return glfwWindowShouldClose(windowHandle);
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public boolean isResized() {
-        return resized;
-    }
-
     public void setResized(boolean resized) {
         this.resized = resized;
-    }
-
-    public boolean isvSync() {
-        return opts.isEnableVsync();
-    }
-
-    public void update() {
-        glfwSwapBuffers(windowHandle);
-        glfwPollEvents();
-    }
-
-    public WindowOptions getOptions() {
-        return opts;
     }
 }
