@@ -7,7 +7,6 @@ public abstract class GameState implements Updateable {
     protected GameStateManager gsm;
 
     public abstract void init(Window w);
-    public abstract void update();
     public abstract void render(Window w);
     public abstract void processInput();
 }

@@ -1,4 +1,4 @@
-package com.holub.kyle.game.graphics;
+package com.holub.kyle.game.main;
 
 import com.holub.kyle.game.engine.GameEngine;
 import com.holub.kyle.game.engine.state.GameState;

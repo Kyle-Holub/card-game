@@ -7,6 +7,8 @@ import com.holub.kyle.game.logic.player.PlayerQueue;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.stream.IntStream;
+
 @Slf4j
 public class DealSequence implements Updateable {
 
@@ -36,6 +38,11 @@ public class DealSequence implements Updateable {
                 isDealing = false;
             }
         }
+    }
+
+    public void quickUpdate() {
+        IntStream.range(0, numTricks).forEach(i -> players.getPlayerQ().forEach(player -> player.giveCard(deck.drawCard())));
+        isDealing = false;
     }
 
     public Card getTrumpCard() {

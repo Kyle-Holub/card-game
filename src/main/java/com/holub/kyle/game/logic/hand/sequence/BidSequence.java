@@ -56,4 +56,25 @@ public class BidSequence implements Updateable {
             }
         }
     }
+
+    public void quickUpdate() {
+        int totalBid = 0;
+        for (int i = 0; i < players.numPlayers() - 1; i++) {
+            int bid = players.getCurrentPlayer().getBid();
+            bidMap.put(players.getCurrentPlayer(), bid);
+            totalBid += bid;
+            players.nextPlayer();
+        }
+
+        int bid;
+        if (totalBid <= numTricks) {
+            int cannotBid = numTricks - totalBid;
+            bid = players.getCurrentPlayer().getBidWithCatch(cannotBid);
+        } else {
+            bid = players.getCurrentPlayer().getBid();
+        }
+        bidMap.put(players.getCurrentPlayer(), bid);
+        players.nextPlayer();
+        isBidding = false;
+    }
 }

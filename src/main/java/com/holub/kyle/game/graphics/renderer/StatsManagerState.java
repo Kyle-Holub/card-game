@@ -49,7 +49,6 @@ public class StatsManagerState extends GameState {
                 game = new HandSeriesManager();
                 game.init();
             } else {
-                log.info("done");
                 System.exit(0);
             }
         }
@@ -57,20 +56,13 @@ public class StatsManagerState extends GameState {
 
     @Override
     public void render(Window w) {
-        clear();
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-//        text.render(w);
         text.renderTimeElapsed(w, startTime);
         text.renderText(w, "Games Completed: " + gamesRun, 500f, 500f);
         text.renderText(w, "Highest Score: " + highestScore, 500f, 600f);
     }
 
     @Override
-    public void processInput() {
-        // not needed
-    }
-
-    public void clear() {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-    }
+    public void processInput() { /* not needed */ }
 }

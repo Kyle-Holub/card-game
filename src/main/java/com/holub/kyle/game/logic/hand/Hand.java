@@ -39,14 +39,14 @@ public class Hand implements Updateable {
     @Override
     public void update() {
         if (dealSequence.isDealing()) {
-            dealSequence.update();
+            dealSequence.quickUpdate();
             if (!dealSequence.isDealing()) {
                 log.info("dealing complete");
                 trumpCard = dealSequence.getTrumpCard();
                 playSequence.setTrumpSuit(trumpCard.getSuit());
             }
         } else if (bidSequence.isBidding()) {
-            bidSequence.update();
+            bidSequence.quickUpdate();
             if (!bidSequence.isBidding()) {
                 log.info("bidding complete");
                 bidMap = bidSequence.getBidMap();
