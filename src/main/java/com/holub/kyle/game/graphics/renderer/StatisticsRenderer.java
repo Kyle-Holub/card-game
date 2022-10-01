@@ -34,7 +34,7 @@ public class StatisticsRenderer {
     int screenWidth;
     int screenHeight;
 
-    private static final int LINE_WIDTH = 3;
+    private static final int LINE_WIDTH = 2;
     private static final int PAD_TOP = 150;
     private static final int PAD_BOTTOM = 50;
     private static final int PAD_LEFT = 50;
@@ -87,9 +87,9 @@ public class StatisticsRenderer {
             final int[] xPos = {PAD_LEFT};
             snapShots.stream().skip(1).forEach(snapShot -> {
                 nvgBeginPath(nvgContext);
-                nvgMoveTo(nvgContext, xPos[0], graphYZero - prevSnap.get().getHighestScore());
+                nvgMoveTo(nvgContext, xPos[0], graphYZero - normalize(prevSnap.get().getHighestScore()));
                 xPos[0] += widthBetweenPoints;
-                nvgLineTo(nvgContext, xPos[0], graphYZero - snapShot.getHighestScore());
+                nvgLineTo(nvgContext, xPos[0], graphYZero - normalize(snapShot.getHighestScore()));
                 nvgStrokeColor(nvgContext, rgba(255, 60, 60, 255, nvgColor));
                 nvgStrokeWidth(nvgContext, LINE_WIDTH);
                 nvgStroke(nvgContext);
@@ -99,6 +99,10 @@ public class StatisticsRenderer {
         }
 
         nvgEndFrame(nvgContext);
+    }
+
+    private float normalize(int score) {
+        return (float) (5 * score);
     }
 
     // update frequency in seconds
