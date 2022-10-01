@@ -3,6 +3,7 @@ package com.holub.kyle.game.graphics.renderer;
 import com.holub.kyle.game.engine.state.GameState;
 import com.holub.kyle.game.graphics.handlers.Window;
 import com.holub.kyle.game.logic.hand.HandSeriesManager;
+import com.holub.kyle.game.util.SecondTimer;
 import lombok.extern.slf4j.Slf4j;
 
 import java.text.DecimalFormat;
@@ -16,6 +17,8 @@ import static org.lwjgl.opengl.GL11.glClear;
 @Slf4j
 public class StatsManagerState extends GameState {
 
+    private static final int UPDATE_FREQ_IN_MILLIS = 5000;
+
     private final int maxGames;
     private int highestScore;
     private double average;
@@ -24,6 +27,8 @@ public class StatsManagerState extends GameState {
     private TextRenderer text;
     private StatisticsRenderer statsRenderer;
     private LocalDateTime startTime;
+
+    private SecondTimer timer;
 
     DecimalFormat df = new DecimalFormat("###");
 
@@ -45,6 +50,10 @@ public class StatsManagerState extends GameState {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        timer = new SecondTimer();
+        timer.start();
+        statsRenderer.update(new SnapShot(highestScore, average));
     }
 
     @Override
@@ -64,6 +73,11 @@ public class StatsManagerState extends GameState {
                 System.exit(0);
             }
         }
+
+        if (timer.getElapsedTimeInSeconds() > UPDATE_FREQ_IN_MILLIS) {
+            statsRenderer.update(new SnapShot(highestScore, average));
+            timer.start();
+        }
     }
 
     private void updateRollingAverage(double newSample) {
@@ -76,7 +90,7 @@ public class StatsManagerState extends GameState {
     public void render(Window w) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
         int TEXT_MARGIN_LEFT = 50;
-        statsRenderer.render(w);
+        statsRenderer.render();
         text.renderTimeElapsed(w, startTime);
         text.renderText(w, "Games Completed: " + gamesRun, TEXT_MARGIN_LEFT, 15f);
         text.renderText(w, "Highest Score: " + highestScore, TEXT_MARGIN_LEFT, 60f);
