@@ -55,8 +55,8 @@ public class TextRenderer {
         nvgFontSize(nvgContext, 40.0f);
         nvgFontFace(nvgContext, FONT_NAME);
         nvgTextAlign(nvgContext, NVG_ALIGN_LEFT | NVG_ALIGN_TOP);
-        nvgFillColor(nvgContext, setRgbColor(0xe6, 0xea, 0xed, nvgColor));
-        nvgText(nvgContext, window.getWidth() - 200f, window.getHeight() - 95f, getTimeElapsed(startTime));
+        nvgFillColor(nvgContext, setRgbColor(255, 255, 255, nvgColor));
+        nvgText(nvgContext, window.getWidth() - 215f, 15f, getTimeElapsed(startTime));
     }
 
     private static String getTimeElapsed(LocalDateTime startTime) {
@@ -70,7 +70,7 @@ public class TextRenderer {
     public void renderText(Window window, String text, float posX, float posY) {
         nvgBeginFrame(nvgContext, window.getWidth(), window.getHeight(), 1);
 
-        nvgFontSize(nvgContext, 60.0f);
+        nvgFontSize(nvgContext, 40.0f);
         nvgFontFace(nvgContext, FONT_NAME);
         nvgTextAlign(nvgContext, NVG_ALIGN_LEFT | NVG_ALIGN_TOP);
         nvgFillColor(nvgContext, setRgbColor(255, 255, 255, nvgColor));

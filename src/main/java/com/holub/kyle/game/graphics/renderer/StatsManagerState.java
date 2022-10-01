@@ -22,6 +22,7 @@ public class StatsManagerState extends GameState {
     private int gamesRun = 0;
     private HandSeriesManager game;
     private TextRenderer text;
+    private StatisticsRenderer statsRenderer;
     private LocalDateTime startTime;
 
     DecimalFormat df = new DecimalFormat("###");
@@ -37,8 +38,10 @@ public class StatsManagerState extends GameState {
         game.init();
         average = 0;
         text = new TextRenderer();
+        statsRenderer = new StatisticsRenderer();
         try {
             text.init(w);
+            statsRenderer.init(w);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -72,11 +75,12 @@ public class StatsManagerState extends GameState {
     @Override
     public void render(Window w) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
+        int TEXT_MARGIN_LEFT = 50;
+        statsRenderer.render(w);
         text.renderTimeElapsed(w, startTime);
-        text.renderText(w, "Games Completed: " + gamesRun, 500f, 500f);
-        text.renderText(w, "Highest Score: " + highestScore, 500f, 600f);
-        text.renderText(w, "Average Score: " + df.format(average), 500f, 700f);
+        text.renderText(w, "Games Completed: " + gamesRun, TEXT_MARGIN_LEFT, 15f);
+        text.renderText(w, "Highest Score: " + highestScore, TEXT_MARGIN_LEFT, 60f);
+        text.renderText(w, "Average Score: " + df.format(average), TEXT_MARGIN_LEFT, 105f);
     }
 
     @Override
