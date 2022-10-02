@@ -1,11 +1,19 @@
 package com.holub.kyle.game.graphics.renderer;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Data
 public class SnapShot {
-    private int highestScore;
-    private double average;
+    private final int highestScore;
+    private final float average;
+    private int weight = 1;
+    private float xPos;
+    private float highestScoreYPos;
+    private float averageYPos;
+
+    public void incWeight() {
+        weight++;
+    }
 }

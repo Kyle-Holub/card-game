@@ -44,7 +44,9 @@ public class StatisticsRenderer {
     private int graphWidth;
     private int graphHeight;
 
+    private int numUpdates;
     private int graphYZero;
+    private float widthBetweenPoints;
 
     public void init(Window w) {
         snapShots = new ArrayList<>();
@@ -57,7 +59,13 @@ public class StatisticsRenderer {
         graphWidth = screenWidth - (PAD_LEFT + PAD_RIGHT);
         graphHeight = screenHeight - (PAD_TOP + PAD_BOTTOM);
 
+        numUpdates = 1;
         graphYZero = screenHeight - PAD_BOTTOM;
+
+        SnapShot firstSnap = new SnapShot(0, 0);
+        firstSnap.setHighestScoreYPos(graphYZero);
+        firstSnap.setAverageYPos(graphYZero);
+        snapShots.add(firstSnap);
 
         this.nvgContext = w.getOpts().isAntialiasing() ? nvgCreate(NVG_ANTIALIAS | NVG_STENCIL_STROKES) : nvgCreate(NVG_STENCIL_STROKES);
         if (this.nvgContext == NULL) {
@@ -67,8 +75,26 @@ public class StatisticsRenderer {
         nvgColor = NVGColor.create();
     }
 
-    public void update(SnapShot snapShot) {
-        snapShots.add(snapShot);
+    public void update(int highScore, float average) {
+        numUpdates++;
+        widthBetweenPoints = (float) graphWidth / (numUpdates - 1);
+        SnapShot previousSnapshot = snapShots.get(snapShots.size() - 1);
+        if (highScore != previousSnapshot.getHighestScore()) {
+            SnapShot snapWithDiff = new SnapShot(highScore, average);
+            snapWithDiff.setHighestScoreYPos(graphYZero - normalize(highScore));
+            snapWithDiff.setAverageYPos(graphYZero - normalize(average));
+            snapShots.add(snapWithDiff);
+        } else {
+            previousSnapshot.incWeight();
+        }
+
+        float currentXPos = PAD_LEFT;
+        snapShots.get(0).setXPos(currentXPos);
+        for (int i = 1; i < snapShots.size(); i++) {
+            SnapShot snapShot = snapShots.get(i);
+            currentXPos += widthBetweenPoints * snapShot.getWeight();
+            snapShot.setXPos(currentXPos);
+        }
     }
 
     public void render() {
@@ -81,14 +107,10 @@ public class StatisticsRenderer {
         nvgClosePath(nvgContext);
 
         if (snapShots.size() > 1) {
-            float widthBetweenPoints = graphWidth / (snapShots.size() - 1);
-
             AtomicReference<SnapShot> prevSnap = new AtomicReference<>(snapShots.get(0));
-            final float[] xPos = {PAD_LEFT};
             snapShots.stream().skip(1).forEach(snapShot -> {
-                renderHighestScoreLine(prevSnap, xPos, snapShot, xPos[0] + widthBetweenPoints);
-                renderAverageScoreLine(prevSnap, xPos, snapShot, xPos[0] + widthBetweenPoints);
-                xPos[0] += widthBetweenPoints;
+                renderHighestScoreLine(prevSnap, snapShot);
+                renderAverageScoreLine(prevSnap, snapShot);
                 prevSnap.set(snapShot);
             });
         }
@@ -96,20 +118,20 @@ public class StatisticsRenderer {
         nvgEndFrame(nvgContext);
     }
 
-    private void renderAverageScoreLine(AtomicReference<SnapShot> prevSnap, float[] xPos, SnapShot snapShot, float nextXPos) {
+    private void renderAverageScoreLine(AtomicReference<SnapShot> prevSnap, SnapShot snapShot) {
         nvgBeginPath(nvgContext);
-        nvgMoveTo(nvgContext, xPos[0], graphYZero - normalize(prevSnap.get().getAverage()));
-        nvgLineTo(nvgContext, nextXPos, graphYZero - normalize(snapShot.getAverage()));
+        nvgMoveTo(nvgContext, prevSnap.get().getXPos(), prevSnap.get().getAverageYPos());
+        nvgLineTo(nvgContext, snapShot.getXPos(), snapShot.getAverageYPos());
         nvgStrokeColor(nvgContext, rgba(60, 60, 255, 255, nvgColor));
         nvgStrokeWidth(nvgContext, LINE_WIDTH);
         nvgStroke(nvgContext);
         nvgClosePath(nvgContext);
     }
 
-    private void renderHighestScoreLine(AtomicReference<SnapShot> prevSnap, float[] xPos, SnapShot snapShot, float nextXPos) {
+    private void renderHighestScoreLine(AtomicReference<SnapShot> prevSnap, SnapShot snapShot) {
         nvgBeginPath(nvgContext);
-        nvgMoveTo(nvgContext, xPos[0], graphYZero - normalize(prevSnap.get().getHighestScore()));
-        nvgLineTo(nvgContext, nextXPos, graphYZero - normalize(snapShot.getHighestScore()));
+        nvgMoveTo(nvgContext, prevSnap.get().getXPos(), prevSnap.get().getHighestScoreYPos());
+        nvgLineTo(nvgContext, snapShot.getXPos(), snapShot.getHighestScoreYPos());
         nvgStrokeColor(nvgContext, rgba(255, 60, 60, 255, nvgColor));
         nvgStrokeWidth(nvgContext, LINE_WIDTH);
         nvgStroke(nvgContext);

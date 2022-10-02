@@ -17,11 +17,11 @@ import static org.lwjgl.opengl.GL11.glClear;
 @Slf4j
 public class StatsManagerState extends GameState {
 
-    private static final int UPDATE_FREQ_IN_MILLIS = 5000;
+    private static final int UPDATE_FREQ_IN_MILLIS = 500;
 
     private final int maxGames;
     private int highestScore;
-    private double average;
+    private float average;
     private int gamesRun = 0;
     private HandSeriesManager game;
     private TextRenderer text;
@@ -53,7 +53,6 @@ public class StatsManagerState extends GameState {
 
         timer = new SecondTimer();
         timer.start();
-        statsRenderer.update(new SnapShot(highestScore, average));
     }
 
     @Override
@@ -75,14 +74,14 @@ public class StatsManagerState extends GameState {
         }
 
         if (timer.getElapsedTimeInSeconds() > UPDATE_FREQ_IN_MILLIS) {
-            statsRenderer.update(new SnapShot(highestScore, average));
+            statsRenderer.update(highestScore, average);
             timer.start();
         }
     }
 
     private void updateRollingAverage(double newSample) {
         if (gamesRun > 0) {
-            average = average * (gamesRun - 1) / gamesRun + newSample / gamesRun;
+            average = (float) (average * (gamesRun - 1) / gamesRun + newSample / gamesRun);
         }
     }
 
