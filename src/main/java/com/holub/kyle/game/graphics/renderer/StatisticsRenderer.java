@@ -81,19 +81,14 @@ public class StatisticsRenderer {
         nvgClosePath(nvgContext);
 
         if (snapShots.size() > 1) {
-            int widthBetweenPoints = graphWidth / (snapShots.size() - 1);
+            float widthBetweenPoints = graphWidth / (snapShots.size() - 1);
 
             AtomicReference<SnapShot> prevSnap = new AtomicReference<>(snapShots.get(0));
-            final int[] xPos = {PAD_LEFT};
+            final float[] xPos = {PAD_LEFT};
             snapShots.stream().skip(1).forEach(snapShot -> {
-                nvgBeginPath(nvgContext);
-                nvgMoveTo(nvgContext, xPos[0], graphYZero - normalize(prevSnap.get().getHighestScore()));
+                renderHighestScoreLine(prevSnap, xPos, snapShot, xPos[0] + widthBetweenPoints);
+                renderAverageScoreLine(prevSnap, xPos, snapShot, xPos[0] + widthBetweenPoints);
                 xPos[0] += widthBetweenPoints;
-                nvgLineTo(nvgContext, xPos[0], graphYZero - normalize(snapShot.getHighestScore()));
-                nvgStrokeColor(nvgContext, rgba(255, 60, 60, 255, nvgColor));
-                nvgStrokeWidth(nvgContext, LINE_WIDTH);
-                nvgStroke(nvgContext);
-                nvgClosePath(nvgContext);
                 prevSnap.set(snapShot);
             });
         }
@@ -101,7 +96,31 @@ public class StatisticsRenderer {
         nvgEndFrame(nvgContext);
     }
 
+    private void renderAverageScoreLine(AtomicReference<SnapShot> prevSnap, float[] xPos, SnapShot snapShot, float nextXPos) {
+        nvgBeginPath(nvgContext);
+        nvgMoveTo(nvgContext, xPos[0], graphYZero - normalize(prevSnap.get().getAverage()));
+        nvgLineTo(nvgContext, nextXPos, graphYZero - normalize(snapShot.getAverage()));
+        nvgStrokeColor(nvgContext, rgba(60, 60, 255, 255, nvgColor));
+        nvgStrokeWidth(nvgContext, LINE_WIDTH);
+        nvgStroke(nvgContext);
+        nvgClosePath(nvgContext);
+    }
+
+    private void renderHighestScoreLine(AtomicReference<SnapShot> prevSnap, float[] xPos, SnapShot snapShot, float nextXPos) {
+        nvgBeginPath(nvgContext);
+        nvgMoveTo(nvgContext, xPos[0], graphYZero - normalize(prevSnap.get().getHighestScore()));
+        nvgLineTo(nvgContext, nextXPos, graphYZero - normalize(snapShot.getHighestScore()));
+        nvgStrokeColor(nvgContext, rgba(255, 60, 60, 255, nvgColor));
+        nvgStrokeWidth(nvgContext, LINE_WIDTH);
+        nvgStroke(nvgContext);
+        nvgClosePath(nvgContext);
+    }
+
     private float normalize(int score) {
+        return (float) (5 * score);
+    }
+
+    private float normalize(double score) {
         return (float) (5 * score);
     }
 
